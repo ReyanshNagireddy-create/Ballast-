@@ -1,0 +1,20 @@
+# Copy to .github/workflows/ballast.yml — the two-minute setup.
+name: Migration safety
+
+on:
+  pull_request:
+    paths:
+      - "**/migrations/**"
+      - "**/*.sql"
+
+jobs:
+  ballast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ballast-dev/ballast/action@v0.4.0
+        with:
+          # everything is optional; auto-detection covers common layouts
+          fail-on: blocker
+          # upload: "true"
+          # api-key: ${{ secrets.BALLAST_API_KEY }}

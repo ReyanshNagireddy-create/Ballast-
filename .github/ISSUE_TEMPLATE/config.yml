@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / discussion
+    url: https://github.com/ballast-dev/ballast/discussions
+    about: Usage questions, migration-safety advice, and general discussion.
+  - name: Security vulnerability
+    url: https://ballast.dev/contact
+    about: Please report vulnerabilities privately to security@ballast.dev — see SECURITY.md.

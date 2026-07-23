@@ -1,0 +1,43 @@
+{
+  "name": "@ballast/cli",
+  "version": "0.4.0",
+  "description": "Ballast CLI — catch dangerous Postgres migrations before they reach production.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "ballast": "./dist/index.js"
+  },
+  "main": "./dist/api.js",
+  "types": "./dist/api.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ballast-dev/ballast",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "postgres",
+    "migrations",
+    "linter",
+    "ci",
+    "zero-downtime"
+  ],
+  "dependencies": {
+    "@ballast/core": "0.4.0",
+    "commander": "^12.1.0",
+    "picocolors": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}

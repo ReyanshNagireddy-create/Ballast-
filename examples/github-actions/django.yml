@@ -1,0 +1,27 @@
+# Django generates migrations as Python; feed Ballast the compiled SQL.
+name: Migration safety (Django)
+
+on:
+  pull_request:
+    paths: ["**/migrations/**"]
+
+jobs:
+  ballast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install app
+        run: pip install -r requirements.txt
+      - name: Lint the SQL Django will actually run
+        run: |
+          set -euo pipefail
+          for mig in $(python manage.py showmigrations --plan | awk '/\[ \]/ {print $2}'); do
+            app="${mig%%.*}"; name="${mig#*.}"
+            python manage.py sqlmigrate "$app" "$name"
+          done | npx @ballast/cli check --stdin --stdin-filename pending-migrations.sql --preset django --format github

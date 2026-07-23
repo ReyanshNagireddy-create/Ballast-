@@ -1,0 +1,40 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "abyss": { "$value": "#060A12", "$type": "color", "$description": "Page background" },
+    "surface": { "$value": "#0C1220", "$type": "color", "$description": "Cards, terminal chrome" },
+    "raised": { "$value": "#111A2C", "$type": "color", "$description": "Hover states, chips" },
+    "line": { "$value": "rgba(148,163,184,0.14)", "$type": "color", "$description": "Hairline borders" },
+    "ink": { "$value": "#E6EBF4", "$type": "color", "$description": "Primary text" },
+    "muted": { "$value": "#8A99B0", "$type": "color", "$description": "Secondary text" },
+    "faint": { "$value": "#5B6B84", "$type": "color", "$description": "Metadata text" },
+    "beacon": { "$value": "#2DD4BF", "$type": "color", "$description": "Brand accent — CTAs, links" },
+    "beaconBright": { "$value": "#5EEAD4", "$type": "color", "$description": "Accent hover, code highlights" },
+    "indigoSoft": { "$value": "#818CF8", "$type": "color", "$description": "Secondary accent, notices" },
+    "ok": { "$value": "#34D399", "$type": "color", "$description": "Pass / success (semantic, reserved)" },
+    "warn": { "$value": "#FBBF24", "$type": "color", "$description": "Warnings (semantic, reserved)" },
+    "danger": { "$value": "#FB7185", "$type": "color", "$description": "Blockers / fail (semantic, reserved)" }
+  },
+  "font": {
+    "sans": { "$value": "Inter, ui-sans-serif, system-ui, sans-serif", "$type": "fontFamily" },
+    "mono": { "$value": "'JetBrains Mono', ui-monospace, 'SF Mono', monospace", "$type": "fontFamily" }
+  },
+  "typeScale": {
+    "display": { "$value": { "fontSize": "60px", "lineHeight": 1.1, "letterSpacing": "-0.02em", "fontWeight": 600 }, "$type": "typography" },
+    "h2": { "$value": { "fontSize": "36px", "lineHeight": 1.15, "letterSpacing": "-0.015em", "fontWeight": 600 }, "$type": "typography" },
+    "h3": { "$value": { "fontSize": "20px", "lineHeight": 1.3, "fontWeight": 500 }, "$type": "typography" },
+    "body": { "$value": { "fontSize": "16px", "lineHeight": 1.65, "fontWeight": 400 }, "$type": "typography" },
+    "small": { "$value": { "fontSize": "14px", "lineHeight": 1.6, "fontWeight": 400 }, "$type": "typography" },
+    "code": { "$value": { "fontSize": "13px", "lineHeight": 1.6, "fontWeight": 400 }, "$type": "typography" }
+  },
+  "radius": {
+    "sm": { "$value": "6px", "$type": "dimension" },
+    "md": { "$value": "10px", "$type": "dimension" },
+    "lg": { "$value": "12px", "$type": "dimension" },
+    "xl": { "$value": "16px", "$type": "dimension" }
+  },
+  "motion": {
+    "fadeUp": { "$value": { "duration": "0.7s", "easing": "cubic-bezier(0.16, 1, 0.3, 1)" }, "$type": "transition" },
+    "fadeIn": { "$value": { "duration": "0.9s", "easing": "ease" }, "$type": "transition" }
+  }
+}

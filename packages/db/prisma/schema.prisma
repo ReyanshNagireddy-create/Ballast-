@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Tenancy ─────────────────────────────────────────────────────────────────
+
+enum Plan {
+  FREE
+  TEAM
+  ENTERPRISE
+}
+
+model Organization {
+  id               String        @id @default(cuid())
+  clerkOrgId       String        @unique
+  name             String
+  slug             String        @unique
+  plan             Plan          @default(FREE)
+  stripeCustomerId String?       @unique
+  subscription     Subscription?
+  projects         Project[]
+  members          Membership[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+enum MemberRole {
+  ADMIN
+  MEMBER
+}
+
+model Membership {
+  id          String       @id @default(cuid())
+  org         Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId       String
+  clerkUserId String
+  role        MemberRole   @default(MEMBER)
+  createdAt   DateTime     @default(now())
+
+  @@unique([orgId, clerkUserId])
+  @@index([clerkUserId])
+}
+
+// ── Projects & credentials ──────────────────────────────────────────────────
+
+model Project {
+  id            String         @id @default(cuid())
+  org           Organization   @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId         String
+  name          String
+  slug          String
+  /// "owner/repo" when connected to GitHub.
+  repository    String?
+  defaultBranch String         @default("main")
+  /// Migration tool preset mirrored from ballast.config.json.
+  preset        String         @default("raw")
+  pgVersion     Int            @default(15)
+  /// Rule severity overrides, same shape as ballast.config.json "rules".
+  ruleConfig    Json           @default("{}")
+  apiKeys       ApiKey[]
+  checkRuns     CheckRun[]
+  rehearsals    RehearsalRun[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([orgId, slug])
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+  name       String
+  /// SHA-256 of the full key. The plaintext is shown once at creation.
+  hashedKey  String    @unique
+  /// First 12 characters (e.g. "blt_live_3fa9") for display.
+  prefix     String
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([projectId])
+}
+
+// ── Checks & findings ───────────────────────────────────────────────────────
+
+enum CheckSource {
+  CLI
+  GITHUB_APP
+  API
+}
+
+enum CheckStatus {
+  QUEUED
+  COMPLETE
+  FAILED
+}
+
+model CheckRun {
+  id            String      @id @default(cuid())
+  project       Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId     String
+  source        CheckSource @default(API)
+  status        CheckStatus @default(QUEUED)
+  branch        String?
+  commitSha     String?
+  repository    String?
+  runUrl        String?
+  engineVersion String
+  files         Int
+  statements    Int
+  blockers      Int
+  warnings      Int
+  notices       Int
+  score         Int
+  grade         String
+  passed        Boolean
+  findings      Finding[]
+  rehearsals    RehearsalRun[]
+  createdAt     DateTime    @default(now())
+
+  @@index([projectId, createdAt(sort: Desc)])
+}
+
+model Finding {
+  id         String   @id @default(cuid())
+  checkRun   CheckRun @relation(fields: [checkRunId], references: [id], onDelete: Cascade)
+  checkRunId String
+  ruleId     String
+  severity   String
+  category   String
+  message    String
+  why        String?
+  file       String
+  line       Int
+  statement  String
+  /// { summary, sql?, steps? } — mirrors the engine's Fix shape.
+  fix        Json?
+
+  @@index([checkRunId])
+  @@index([ruleId])
+}
+
+// ── Rehearsals ──────────────────────────────────────────────────────────────
+
+enum RehearsalStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+model RehearsalRun {
+  id         String          @id @default(cuid())
+  project    Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+  checkRun   CheckRun?       @relation(fields: [checkRunId], references: [id], onDelete: SetNull)
+  checkRunId String?
+  status     RehearsalStatus @default(QUEUED)
+  /// The migration SQL that was rehearsed.
+  sql        String
+  /// Per-statement timings: [{ statement, ms }].
+  timings    Json?
+  error      String?
+  startedAt  DateTime?
+  finishedAt DateTime?
+  createdAt  DateTime        @default(now())
+
+  @@index([projectId, createdAt(sort: Desc)])
+}
+
+// ── Billing ─────────────────────────────────────────────────────────────────
+
+model Subscription {
+  id                   String       @id @default(cuid())
+  org                  Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  orgId                String       @unique
+  stripeSubscriptionId String       @unique
+  status               String
+  priceId              String
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean      @default(false)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}

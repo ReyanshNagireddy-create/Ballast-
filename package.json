@@ -1,0 +1,25 @@
+{
+  "name": "ballast-monorepo",
+  "private": true,
+  "version": "0.4.0",
+  "description": "Ballast — the open-source safety layer for Postgres schema migrations.",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @ballast/core -w @ballast/cli -w @ballast/db && npm run build -w @ballast/web -w @ballast/worker",
+    "build:packages": "npm run build -w @ballast/core -w @ballast/cli",
+    "test": "npm run test -w @ballast/core -w @ballast/cli",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "dev": "npm run dev -w @ballast/web",
+    "dev:worker": "npm run dev -w @ballast/worker",
+    "db:generate": "npm run generate -w @ballast/db",
+    "db:migrate": "npm run migrate:dev -w @ballast/db",
+    "bench": "npm run bench -w @ballast/core"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

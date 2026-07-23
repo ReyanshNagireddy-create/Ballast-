@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ballast.dev/schema/config.json",
+  "preset": "raw",
+  "pgVersion": 15,
+  "failOn": "blocker",
+  "rules": {
+    "no-drop-column": "blocker",
+    "require-not-valid-foreign-key": "blocker"
+  },
+  "ignore": ["migrations/0000_bootstrap.sql"]
+}

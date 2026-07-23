@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="80" viewBox="0 0 180 40" fill="none">
+  <rect x="4" y="4" width="32" height="32" rx="8" fill="#0C1220"/>
+  <rect x="4.5" y="4.5" width="31" height="31" rx="7.5" stroke="url(#g)" stroke-opacity="0.5"/>
+  <path d="M11 16h18" stroke="#2DD4BF" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M13.5 21h13" stroke="#2DD4BF" stroke-width="2.4" stroke-linecap="round" opacity="0.66"/>
+  <path d="M16 26h8" stroke="#2DD4BF" stroke-width="2.4" stroke-linecap="round" opacity="0.36"/>
+  <text x="46" y="27.5" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="21" font-weight="600" letter-spacing="-0.4" fill="#E6EBF4">Ballast</text>
+  <defs>
+    <linearGradient id="g" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2DD4BF"/>
+      <stop offset="1" stop-color="#818CF8"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,54 @@
+name: "Ballast — Postgres migration safety"
+description: >-
+  Catch dangerous Postgres migrations in CI: locking hazards, table rewrites,
+  and downtime risks, annotated inline on the PR diff.
+author: "Ballast"
+branding:
+  icon: anchor
+  color: gray-dark
+
+inputs:
+  paths:
+    description: "Files or directories to check. Empty = auto-detect (prisma/migrations, db/migrate, drizzle/, …)."
+    required: false
+    default: ""
+  preset:
+    description: "Migration tool preset: raw | prisma | django | rails | drizzle | flyway | goose | golang-migrate."
+    required: false
+    default: ""
+  fail-on:
+    description: "Minimum severity that fails the check: notice | warning | blocker."
+    required: false
+    default: ""
+  config:
+    description: "Path to ballast.config.json (defaults to repo-root discovery)."
+    required: false
+    default: ""
+  upload:
+    description: "Upload the report to Ballast Cloud ('true' requires api-key)."
+    required: false
+    default: "false"
+  api-key:
+    description: "Ballast Cloud API key (store as a repository secret)."
+    required: false
+    default: ""
+  version:
+    description: "@ballast/cli version to run."
+    required: false
+    default: "latest"
+
+runs:
+  using: composite
+  steps:
+    - name: Run ballast check
+      shell: bash
+      env:
+        BALLAST_API_KEY: ${{ inputs.api-key }}
+      run: |
+        ARGS=(check --format github)
+        [ -n "${{ inputs.paths }}" ] && ARGS+=(${{ inputs.paths }})
+        [ -n "${{ inputs.preset }}" ] && ARGS+=(--preset "${{ inputs.preset }}")
+        [ -n "${{ inputs.fail-on }}" ] && ARGS+=(--fail-on "${{ inputs.fail-on }}")
+        [ -n "${{ inputs.config }}" ] && ARGS+=(--config "${{ inputs.config }}")
+        [ "${{ inputs.upload }}" = "true" ] && ARGS+=(--upload)
+        npx --yes "@ballast/cli@${{ inputs.version }}" "${ARGS[@]}"

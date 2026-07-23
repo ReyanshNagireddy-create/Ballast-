@@ -1,0 +1,48 @@
+{
+  "name": "@ballast/core",
+  "version": "0.4.0",
+  "description": "Static analysis engine for Postgres schema migrations: detects locking hazards, table rewrites, and downtime risks in SQL DDL.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bench": "npm run build && node dist/bench.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ballast-dev/ballast",
+    "directory": "packages/core"
+  },
+  "keywords": [
+    "postgres",
+    "postgresql",
+    "migrations",
+    "ddl",
+    "linter",
+    "zero-downtime",
+    "database",
+    "ci"
+  ],
+  "dependencies": {
+    "pgsql-ast-parser": "^12.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}

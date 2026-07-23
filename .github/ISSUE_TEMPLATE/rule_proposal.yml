@@ -1,0 +1,44 @@
+name: Rule proposal
+description: Propose a new safety rule — ideally born from a real incident.
+labels: ["rule-proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The best rules encode a production incident. If you have a (sanitized) war story, include it — it becomes the rule's documentation.
+  - type: textarea
+    id: pattern
+    attributes:
+      label: The dangerous pattern
+      description: What SQL should Ballast flag?
+      render: sql
+    validations:
+      required: true
+  - type: textarea
+    id: mechanism
+    attributes:
+      label: Why it's dangerous
+      description: The precise mechanism — which lock, which rewrite, which failure. Cite Postgres docs/source where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: safe
+    attributes:
+      label: The safe alternative
+      description: What should the fix suggestion recommend?
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Proposed default severity
+      options: [blocker, warning, notice]
+    validations:
+      required: true
+  - type: textarea
+    id: false-positives
+    attributes:
+      label: False-positive analysis
+      description: When does this pattern NOT deserve a finding? (New tables? Specific PG versions? Specific runners?)
+    validations:
+      required: true

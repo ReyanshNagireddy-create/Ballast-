@@ -1,0 +1,42 @@
+name: Bug report
+description: The engine, CLI, or cloud did something wrong.
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. False positives and false negatives are the highest-priority bugs we have — a safety tool that's wrong is worse than none.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Engine (rule result is wrong)
+        - CLI (crash, output, exit codes, discovery)
+        - GitHub Action / CI integration
+        - Cloud (dashboard, API, rehearsals)
+        - Docs
+    validations:
+      required: true
+  - type: textarea
+    id: sql
+    attributes:
+      label: Migration SQL
+      description: Minimal SQL that reproduces the problem. Redact identifiers if needed — structure is what matters.
+      render: sql
+    validations:
+      required: false
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected vs. what happened
+      description: For rule bugs, tell us the preset and Postgres version — transaction semantics change the correct answer.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Ballast version
+      placeholder: "0.4.0 (ballast --version)"
+    validations:
+      required: true

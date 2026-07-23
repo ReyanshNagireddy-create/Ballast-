@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Dummy keys so `next build` succeeds without real credentials.
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2xlcmsuZXhhbXBsZS5jb20k
+  CLERK_SECRET_KEY: sk_test_placeholder
+  DATABASE_URL: postgresql://ballast:ballast@localhost:5432/ballast
+
+jobs:
+  test:
+    name: Build, typecheck, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Generate Prisma client
+        run: npm run generate -w @ballast/db
+
+      - name: Build packages
+        run: |
+          npm run build -w @ballast/core
+          npm run build -w @ballast/cli
+          npm run build -w @ballast/db
+
+      - name: Typecheck
+        run: npm run typecheck --workspaces --if-present
+
+      - name: Test
+        run: |
+          npm run test -w @ballast/core
+          npm run test -w @ballast/cli
+          npm run test -w @ballast/web
+
+      - name: Build web
+        run: npm run build -w @ballast/web
+
+      - name: Build worker
+        run: npm run build -w @ballast/worker
+
+  self-check:
+    name: Ballast checks its own migrations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build -w @ballast/core && npm run build -w @ballast/cli
+      - name: Check example migrations stay dangerous (and safe)
+        run: |
+          set +e
+          node packages/cli/dist/index.js check examples/prisma-app/unsafe --preset prisma --no-color
+          [ $? -eq 1 ] || { echo "expected unsafe examples to fail"; exit 1; }
+          set -e
+          node packages/cli/dist/index.js check examples/prisma-app/safe --preset prisma --no-color
+
+  docker:
+    name: Docker images build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build web image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: false
+      - name: Build worker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/worker/Dockerfile
+          push: false
