@@ -131,7 +131,7 @@ function readLocalEntry(
   } catch {
     return null;
   }
-  return null; // an compression method we do not support
+  return null; // a compression method we do not support
 }
 
 /* ────────────────────────────────── tar.gz ─────────────────────────────── */

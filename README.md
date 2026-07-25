@@ -148,7 +148,24 @@ DROP TABLE legacy_events;
 | [`apps/worker`](apps/worker) | pg-boss workers: check ingestion, GitHub annotations, rehearsals, retention. |
 | [`action/`](action) | The GitHub Action. |
 | [`examples/`](examples) | Unsafe/safe migration pairs — executable documentation, enforced by CI. |
-| [`docs/`](docs) | [Architecture](docs/architecture.md) · [API](docs/api.md) · [Benchmarks](docs/benchmarks.md) · [Roadmap](docs/roadmap.md) |
+| [`packages/lab-engine`](packages/lab-engine) | AI Product Lab engine: reads a React/Next.js app and simulates how a cohort of AI users would use it. Zero dependencies. |
+| [`apps/lab`](apps/lab) | AI Product Lab: landing page, project ingest, and simulation reports. |
+| [`docs/`](docs) | [Architecture](docs/architecture.md) · [API](docs/api.md) · [Benchmarks](docs/benchmarks.md) · [Roadmap](docs/roadmap.md) · [AI Product Lab](docs/ai-product-lab.md) |
+
+## AI Product Lab
+
+A second product in this repository, sharing its tooling. Where Ballast asks
+"will this migration take production down", AI Product Lab asks "will anyone
+be able to use this thing" — it reads a React or Next.js app, simulates a
+cohort of AI users with different devices, connections, patience, and
+accessibility needs, and reports where they gave up.
+
+```bash
+npm run dev:lab          # http://localhost:3100 — start with the sample project
+```
+
+Every run is seeded and reproducible, nothing is executed, and no model is
+required. Full write-up: **[docs/ai-product-lab.md](docs/ai-product-lab.md)**.
 
 ## Ballast Cloud & self-hosting
 
@@ -170,8 +187,9 @@ $99/mo flat for your whole org. The CLI and engine never require an account.
 ```bash
 npm install
 npm run build:packages   # engine + CLI (no database needed)
-npm run test             # vitest: 84 tests across core, cli, web
+npm run test             # vitest: core, cli, and the AI Product Lab engine
 npm run bench            # engine benchmarks (docs/benchmarks.md)
+npm run dev:lab          # AI Product Lab on :3100
 ```
 
 ## Contributing

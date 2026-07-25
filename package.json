@@ -11,9 +11,11 @@
   "scripts": {
     "build": "npm run build -w @ballast/core -w @ballast/cli -w @ballast/db && npm run build -w @ballast/web -w @ballast/worker",
     "build:packages": "npm run build -w @ballast/core -w @ballast/cli",
-    "test": "npm run test -w @ballast/core -w @ballast/cli",
+    "build:lab": "npm run build -w @productlab/engine && npm run build -w @productlab/web",
+    "test": "npm run test -w @ballast/core -w @ballast/cli -w @productlab/engine",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "dev": "npm run dev -w @ballast/web",
+    "dev:lab": "npm run build -w @productlab/engine && npm run dev -w @productlab/web",
     "dev:worker": "npm run dev -w @ballast/worker",
     "db:generate": "npm run generate -w @ballast/db",
     "db:migrate": "npm run migrate:dev -w @ballast/db",
