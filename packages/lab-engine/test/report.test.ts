@@ -301,3 +301,61 @@ describe("llm", () => {
     expect(parseStringArray('{"a":1}')).toBeNull();
   });
 });
+
+describe("issue evidence", () => {
+  /**
+   * Regression: every session used to donate its quote to every issue it
+   * touched, so a complaint about unlabelled form fields would appear as
+   * evidence for an unrelated auth wall on another screen.
+   */
+  const sessions: Session[] = [
+    {
+      personaId: "p1",
+      outcome: "abandoned",
+      durationMs: 1000,
+      events: [],
+      friction: [
+        { screenId: "/signup", cause: "unlabelled-field", weight: 3 },
+        { screenId: "/dashboard", cause: "auth-wall", weight: 0.4 },
+      ],
+      lastScreenId: "/signup",
+      path: ["/signup"],
+      quote: "The boxes have no labels.",
+    },
+  ];
+
+  const persona = generatePersonas(buildProjectModel(goodApp, "Notes"), 1, 1)[0]!;
+  const personaById = new Map([["p1", { ...persona, id: "p1" }]]);
+
+  it("uses the session's own words for the issue it complained loudest about", () => {
+    const issues = synthesiseIssues(sessions, personaById, new Map());
+    const fields = issues.find((i) => i.cause === "unlabelled-field");
+    expect(fields?.evidence).toContain("The boxes have no labels.");
+  });
+
+  it("does not file that complaint as evidence for an unrelated issue", () => {
+    const issues = synthesiseIssues(sessions, personaById, new Map());
+    const authWall = issues.find((i) => i.cause === "auth-wall");
+    expect(authWall?.evidence).not.toContain("The boxes have no labels.");
+  });
+
+  it("gives the quieter issue evidence scoped to that issue instead", () => {
+    const issues = synthesiseIssues(sessions, personaById, new Map());
+    const authWall = issues.find((i) => i.cause === "auth-wall");
+    expect(authWall?.evidence.length).toBeGreaterThan(0);
+    // The generated line is about signing in, not about form fields.
+    expect(authWall?.evidence.join(" ").toLowerCase()).toMatch(/sign|account/);
+  });
+
+  it("attributes nothing when no persona actually hit the issue", () => {
+    const issues = synthesiseIssues(sessions, new Map(), new Map());
+    const authWall = issues.find((i) => i.cause === "auth-wall");
+    expect(authWall?.evidence).toEqual([]);
+  });
+
+  it("still counts the session against both issues", () => {
+    const issues = synthesiseIssues(sessions, personaById, new Map());
+    expect(issues.every((i) => i.affectedShare === 1)).toBe(true);
+    expect(issues.every((i) => i.sessionsLost === 1)).toBe(true);
+  });
+});

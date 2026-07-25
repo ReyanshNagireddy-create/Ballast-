@@ -30,3 +30,6 @@ coverage/
 # misc
 .turbo/
 .vercel/
+
+# AI Product Lab local run store
+.productlab/

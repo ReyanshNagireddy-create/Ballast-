@@ -8,6 +8,7 @@ import type {
   NavEdge,
   ProjectModel,
   Screen,
+  ScreenSource,
   StaticSignal,
 } from "./types.js";
 
@@ -25,7 +26,7 @@ export function buildProjectModel(files: SourceFile[], name: string): ProjectMod
   const framework = detectFramework(files);
   const pkg = readPackageJson(files, warnings);
 
-  const routeFiles = findRouteFiles(files, framework);
+  const routeFiles = findRouteFiles(files, framework, warnings);
   if (routeFiles.length === 0) {
     warnings.push(
       "No page or route files were found. Supported layouts: Next.js app/ and pages/ directories, or a src/pages|src/routes|src/views folder for plain React.",
@@ -35,13 +36,13 @@ export function buildProjectModel(files: SourceFile[], name: string): ProjectMod
   const screens: Screen[] = [];
   const forms: FormInfo[] = [];
   for (const { file, path } of routeFiles) {
-    const screen = buildScreen(file, path, files);
+    const screen = buildScreen(file, path, files, framework);
     screens.push(screen);
     forms.push(...screen.forms);
   }
 
   markEntryScreens(screens);
-  resolvePostSubmitTargets(screens, routeFiles);
+  resolvePostSubmitTargets(screens);
   const edges = buildEdges(screens);
   const signals = collectSignals(files, screens, pkg);
 
@@ -121,21 +122,58 @@ function readPackageJson(files: SourceFile[], warnings: string[]): PackageInfo {
 interface RouteFile {
   file: SourceFile;
   path: string;
+  /** Directory the owning app is rooted at, for multi-app uploads. */
+  root: string;
 }
 
-export function findRouteFiles(files: SourceFile[], framework: Framework): RouteFile[] {
-  const routes: RouteFile[] = [];
-  const seen = new Set<string>();
-
+export function findRouteFiles(
+  files: SourceFile[],
+  framework: Framework,
+  warnings: string[] = [],
+): RouteFile[] {
+  const all: RouteFile[] = [];
   for (const file of files) {
     const path = routePathFor(file.path, framework);
     if (path === null) continue;
-    if (seen.has(path)) continue;
-    seen.add(path);
-    routes.push({ file, path });
+    all.push({ file, path, root: appRootOf(file.path) });
   }
+
+  // A tutorial repo or a monorepo can hold several independent apps. Merging
+  // their routes into one product model invents navigation that does not exist,
+  // so analyse the largest app and say plainly which ones were left out.
+  const byRoot = new Map<string, RouteFile[]>();
+  for (const route of all) {
+    const list = byRoot.get(route.root);
+    if (list) list.push(route);
+    else byRoot.set(route.root, [route]);
+  }
+
+  let chosen = all;
+  if (byRoot.size > 1) {
+    const ranked = [...byRoot.entries()].sort((a, b) => b[1].length - a[1].length);
+    const [winnerRoot, winnerRoutes] = ranked[0]!;
+    chosen = winnerRoutes;
+    const others = ranked.slice(1).map(([root, routes]) => `${root || "(root)"} (${routes.length})`);
+    warnings.push(
+      `This upload contains ${byRoot.size} separate apps. Analysed the largest — ${winnerRoot || "(root)"} with ${winnerRoutes.length} pages — and skipped ${others.join(", ")}. Upload one app at a time for a report on the others.`,
+    );
+  }
+
+  const seen = new Set<string>();
+  const routes = chosen.filter((route) => {
+    if (seen.has(route.path)) return false;
+    seen.add(route.path);
+    return true;
+  });
   routes.sort((a, b) => a.path.localeCompare(b.path));
   return routes;
+}
+
+/** The directory an app is rooted at: everything before its app/ or pages/ dir. */
+function appRootOf(filePath: string): string {
+  const match = /^(.*?)(?:^|\/)?(app|pages|src)\//.exec(filePath);
+  if (!match) return "";
+  return (match[1] ?? "").replace(/\/$/, "");
 }
 
 /** Map a source path to the URL it serves, or null when it serves none. */
@@ -184,30 +222,132 @@ function normalizeAppSegments(raw: string): string {
 
 /* ───────────────────────────────── screens ─────────────────────────────── */
 
-function buildScreen(file: SourceFile, path: string, allFiles: SourceFile[]): Screen {
+/** How deep to follow local imports out from a page. */
+const IMPORT_DEPTH = 2;
+/** Ceiling on files per screen, so one barrel import cannot pull in the world. */
+const MAX_SCREEN_SOURCES = 24;
+
+function buildScreen(
+  file: SourceFile,
+  path: string,
+  allFiles: SourceFile[],
+  framework: Framework,
+): Screen {
   const id = path;
-  // A page's affordances live in the page file *and* in the local components it
-  // renders; a nav bar extracted into components/nav.tsx is still on the screen.
-  const text = file.text;
-  const affordances = extractAffordances(text, id, file.path);
-  const forms = extractForms(text, id, file.path);
-  const headings = /<h[12][\s>]/.test(text) || /^#\s+/m.test(text);
-  const title = inferTitle(text, path);
+  // A page's affordances live in the page file, in the layouts wrapping it, and
+  // in the local components those render. A sidebar in app/dashboard/layout.tsx
+  // is on the screen as far as the user is concerned, and a <LoginForm /> is the
+  // only reason the login page is not a dead end.
+  const sources = collectScreenSources(file, allFiles, framework);
+  const combined = sources.map((s) => s.text).join("\n");
+
+  const affordances: Affordance[] = [];
+  const forms: FormInfo[] = [];
+  for (const source of sources) {
+    for (const affordance of extractAffordances(source.text, id, source.path)) {
+      affordances.push({ ...affordance, id: `${id}:${affordances.length}`, order: affordances.length });
+    }
+    for (const form of extractForms(source.text, id, source.path)) {
+      forms.push({ ...form, id: `${id}:form:${forms.length}` });
+    }
+  }
 
   return {
     id,
     path,
     file: file.path,
-    title,
-    authGated: isAuthGated(text, path, allFiles),
+    sources,
+    title: inferTitle(file.text, path) || inferTitle(combined, path),
+    authGated: isAuthGated(combined, path, allFiles),
     affordances,
     forms,
-    wordCount: countWords(text),
-    hasHeading: headings,
-    weightBytes: estimateWeight(file, allFiles),
-    unlabelledImages: countUnlabelledImages(text),
+    wordCount: countWords(combined),
+    hasHeading: /<h[12][\s>]/.test(combined),
+    weightBytes: sources.reduce((sum, s) => sum + s.text.length, 0) + libraryWeight(combined),
+    unlabelledImages: countUnlabelledImages(combined),
     isEntry: false,
   };
+}
+
+/**
+ * Gather every file that contributes to what a screen renders.
+ *
+ * Page first (its affordances come first on screen, which the prominence model
+ * relies on), then the layouts that wrap it outermost-first, then the local
+ * components each of those imports, breadth-first to `IMPORT_DEPTH`.
+ */
+export function collectScreenSources(
+  page: SourceFile,
+  allFiles: SourceFile[],
+  framework: Framework,
+): ScreenSource[] {
+  const byPath = new Map(allFiles.map((f) => [f.path, f]));
+  const sources: ScreenSource[] = [{ path: page.path, text: page.text, role: "page" }];
+  const seen = new Set([page.path]);
+
+  for (const layout of layoutsFor(page.path, byPath, framework)) {
+    if (seen.has(layout.path)) continue;
+    seen.add(layout.path);
+    sources.push({ path: layout.path, text: layout.text, role: "layout" });
+  }
+
+  let frontier = sources.map((s) => byPath.get(s.path)).filter((f): f is SourceFile => Boolean(f));
+  for (let depth = 0; depth < IMPORT_DEPTH; depth++) {
+    const next: SourceFile[] = [];
+    for (const file of frontier) {
+      for (const imported of localImportsOf(file, byPath)) {
+        if (seen.has(imported.path)) continue;
+        if (sources.length >= MAX_SCREEN_SOURCES) return sources;
+        seen.add(imported.path);
+        sources.push({ path: imported.path, text: imported.text, role: "component" });
+        next.push(imported);
+      }
+    }
+    if (next.length === 0) break;
+    frontier = next;
+  }
+
+  return sources;
+}
+
+/** Layout files wrapping an app-router page, outermost first. */
+function layoutsFor(
+  pagePath: string,
+  byPath: Map<string, SourceFile>,
+  framework: Framework,
+): SourceFile[] {
+  if (framework !== "next-app") return [];
+  const segments = pagePath.split("/").slice(0, -1);
+  const layouts: SourceFile[] = [];
+  for (let i = 1; i <= segments.length; i++) {
+    const candidate = [...segments.slice(0, i), "layout"].join("/");
+    for (const ext of [".tsx", ".jsx"]) {
+      const layout = byPath.get(`${candidate}${ext}`);
+      if (layout) layouts.push(layout);
+    }
+  }
+  return layouts;
+}
+
+function localImportsOf(file: SourceFile, byPath: Map<string, SourceFile>): SourceFile[] {
+  const found: SourceFile[] = [];
+  const importRe = /from\s+["'](\.[^"']+|@\/[^"']+)["']/g;
+  let match: RegExpExecArray | null;
+  while ((match = importRe.exec(file.text)) !== null) {
+    const resolved = resolveImport(match[1]!, file.path, byPath);
+    if (resolved && !found.includes(resolved)) found.push(resolved);
+  }
+  return found;
+}
+
+/** Heavy client libraries dominate the bundle far more than app code does. */
+function libraryWeight(text: string): number {
+  let bytes = 0;
+  if (/from ["']framer-motion["']/.test(text)) bytes += 110_000;
+  if (/from ["']recharts["']/.test(text)) bytes += 180_000;
+  if (/from ["']moment["']/.test(text)) bytes += 230_000;
+  if (/from ["']lodash["']/.test(text)) bytes += 70_000;
+  return bytes;
 }
 
 export interface TagMatch {
@@ -292,13 +432,13 @@ export function extractAffordances(text: string, screenId: string, file: string)
       iconOnly,
       named,
       keyboardReachable: isKeyboardReachable(tag, attrs),
+      file,
       line: lineAt(text, start),
       order,
     });
     order++;
   }
 
-  void file;
   return affordances;
 }
 
@@ -374,6 +514,7 @@ export function extractForms(text: string, screenId: string, file: string): Form
     forms.push({
       id: `${screenId}:form:${index}`,
       screenId,
+      file,
       fields,
       submitLabel: submit || "Submit",
       line: lineAt(text, start),
@@ -381,7 +522,6 @@ export function extractForms(text: string, screenId: string, file: string): Form
     index++;
   }
 
-  void file;
   return forms;
 }
 
@@ -470,39 +610,47 @@ function submitLabelIn(body: string): string | undefined {
   return undefined;
 }
 
-/** Source bytes of the page plus the local modules it imports, one level deep. */
-function estimateWeight(file: SourceFile, allFiles: SourceFile[]): number {
-  let bytes = file.text.length;
-  const importRe = /from\s+["'](\.[^"']+|@\/[^"']+)["']/g;
-  const byPath = new Map(allFiles.map((f) => [f.path, f]));
-  let match: RegExpExecArray | null;
+const IMPORT_EXTENSIONS = [".tsx", ".ts", ".jsx", ".js", "/index.tsx", "/index.ts", ""];
 
-  while ((match = importRe.exec(file.text)) !== null) {
-    const spec = match[1]!;
-    const resolved = resolveImport(spec, file.path, byPath);
-    if (resolved) bytes += resolved.text.length;
-  }
-  // Heavy client libraries dominate the bundle far more than app code does.
-  if (/from ["']framer-motion["']/.test(file.text)) bytes += 110_000;
-  if (/from ["']recharts["']/.test(file.text)) bytes += 180_000;
-  if (/from ["']moment["']/.test(file.text)) bytes += 230_000;
-  if (/from ["']lodash["']/.test(file.text)) bytes += 70_000;
-  return bytes;
-}
-
+/**
+ * Resolve an import specifier to a file in the uploaded tree.
+ *
+ * Relative specifiers are simple. Aliases are not: `@/` is conventional but its
+ * root is whatever the project's tsconfig says — `src/`, the repo root, or, in
+ * a monorepo, the app directory several levels down. Rather than parse tsconfig
+ * (which may not even be in the upload), walk up from the importing file and
+ * try each ancestor as the alias root. The first hit wins, and the walk is
+ * bounded by the path depth, so a miss costs nothing.
+ */
 function resolveImport(
   spec: string,
   fromPath: string,
   byPath: Map<string, SourceFile>,
 ): SourceFile | undefined {
-  const base = spec.startsWith("@/")
-    ? `src/${spec.slice(2)}`
-    : joinPosix(fromPath.split("/").slice(0, -1).join("/"), spec);
-  for (const ext of [".tsx", ".ts", ".jsx", ".js", "/index.tsx", "/index.ts"]) {
+  if (!spec.startsWith("@/")) {
+    const base = joinPosix(fromPath.split("/").slice(0, -1).join("/"), spec);
+    return findWithExtension(base, byPath);
+  }
+
+  const rest = spec.slice(2);
+  const segments = fromPath.split("/").slice(0, -1);
+  for (let depth = segments.length; depth >= 0; depth--) {
+    const prefix = segments.slice(0, depth).join("/");
+    const candidates = prefix ? [`${prefix}/${rest}`, `${prefix}/src/${rest}`] : [rest, `src/${rest}`];
+    for (const candidate of candidates) {
+      const hit = findWithExtension(candidate, byPath);
+      if (hit) return hit;
+    }
+  }
+  return undefined;
+}
+
+function findWithExtension(base: string, byPath: Map<string, SourceFile>): SourceFile | undefined {
+  for (const ext of IMPORT_EXTENSIONS) {
     const hit = byPath.get(`${base}${ext}`);
     if (hit) return hit;
   }
-  return byPath.get(base);
+  return undefined;
 }
 
 function joinPosix(dir: string, spec: string): string {
@@ -536,14 +684,15 @@ function markEntryScreens(screens: Screen[]): void {
  * auth form is assumed to land on the app's first gated screen, which is what
  * these flows do in practice.
  */
-function resolvePostSubmitTargets(screens: Screen[], routeFiles: RouteFile[]): void {
+function resolvePostSubmitTargets(screens: Screen[]): void {
   const byPath = new Map(screens.map((s) => [s.path, s]));
-  const sourceByPath = new Map(routeFiles.map((r) => [r.path, r.file.text]));
   const firstGated = screens.find((s) => s.authGated && !s.isEntry);
 
   for (const screen of screens) {
     if (screen.forms.length === 0) continue;
-    const source = sourceByPath.get(screen.path) ?? "";
+    // The redirect is rarely in the page: it lives in the server action or the
+    // form component, both of which are in the screen's source set.
+    const source = screen.sources.map((s) => s.text).join("\n");
 
     const explicit = findRedirectTarget(source, byPath, screen.path);
     if (explicit) {
@@ -660,7 +809,7 @@ function collectSignals(
           severity: "blocker",
           title: "Click handler on a non-interactive element",
           detail: `"${affordance.label}" on ${screen.path} responds to a mouse but cannot be reached or activated with a keyboard.`,
-          file: screen.file,
+          file: affordance.file,
           line: affordance.line,
           fix: "Use a <button>, or add tabIndex={0} with a matching onKeyDown handler.",
         });
@@ -671,7 +820,7 @@ function collectSignals(
           severity: "warning",
           title: `Unnamed ${affordance.kind}`,
           detail: `A ${affordance.kind} on ${screen.path} has no text and no aria-label.`,
-          file: screen.file,
+          file: affordance.file,
           line: affordance.line,
           fix: "Add visible text, or an aria-label describing the action.",
         });
@@ -686,7 +835,7 @@ function collectSignals(
           severity: "warning",
           title: `Form field "${field.name}" has no label`,
           detail: `Placeholder-only fields disappear as soon as the user types, and screen readers announce nothing.`,
-          file: screen.file,
+          file: form.file,
           line: field.line,
           fix: `Add <label htmlFor="${field.name}">, or an aria-label on the input.`,
         });

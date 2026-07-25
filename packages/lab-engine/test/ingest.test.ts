@@ -210,3 +210,103 @@ describe("buildProjectModel", () => {
     expect(signal?.severity).toBe("blocker");
   });
 });
+
+describe("screen composition", () => {
+  /**
+   * The bug these cover: a screen used to see only its own page file, so a form
+   * inside <LoginForm /> and a nav bar inside a layout were both invisible —
+   * which made every component-driven page look like a dead end.
+   */
+  const files: SourceFile[] = [
+    pkg({ next: "^15.0.0" }),
+    { path: "app/layout.tsx", text: `<nav><Link href="/pricing">Pricing</Link></nav>` },
+    { path: "app/dashboard/layout.tsx", text: `<aside><Link href="/dashboard/settings">Settings</Link></aside>` },
+    { path: "app/dashboard/page.tsx", text: `import { Chart } from "@/app/ui/chart";\n<h1>Dashboard</h1><Chart />` },
+    { path: "app/ui/chart.tsx", text: `<button aria-label="Refresh"><Icon /></button>` },
+    { path: "app/dashboard/settings/page.tsx", text: `<h1>Settings</h1><Link href="/dashboard">Back</Link>` },
+    { path: "app/pricing/page.tsx", text: `<h1>Pricing</h1><Link href="/">Home</Link>` },
+    {
+      path: "app/login/page.tsx",
+      text: `import LoginForm from "@/app/ui/login-form";\n<LoginForm />`,
+    },
+    {
+      path: "app/ui/login-form.tsx",
+      text: `import { redirect } from "next/navigation";
+        <form><label htmlFor="email">Email</label><input id="email" name="email" required /><button type="submit">Log in</button></form>
+        async function go() { redirect("/dashboard"); }`,
+    },
+  ];
+
+  const model = buildProjectModel(files, "Composed");
+  const dashboard = model.screens.find((s) => s.path === "/dashboard")!;
+  const login = model.screens.find((s) => s.path === "/login")!;
+
+  it("pulls in the layouts wrapping a page", () => {
+    expect(dashboard.sources.map((s) => s.path)).toEqual(
+      expect.arrayContaining(["app/layout.tsx", "app/dashboard/layout.tsx"]),
+    );
+    const labels = dashboard.affordances.map((a) => a.label);
+    expect(labels).toContain("Pricing");
+    expect(labels).toContain("Settings");
+  });
+
+  it("resolves @/ aliases that are not rooted at src/", () => {
+    expect(dashboard.sources.map((s) => s.path)).toContain("app/ui/chart.tsx");
+    expect(dashboard.affordances.some((a) => a.label === "Refresh")).toBe(true);
+  });
+
+  it("attributes each control to the file it is written in, not the page", () => {
+    const refresh = dashboard.affordances.find((a) => a.label === "Refresh");
+    expect(refresh?.file).toBe("app/ui/chart.tsx");
+    const settings = dashboard.affordances.find((a) => a.label === "Settings");
+    expect(settings?.file).toBe("app/dashboard/layout.tsx");
+  });
+
+  it("finds a form that lives in a rendered component", () => {
+    expect(login.forms).toHaveLength(1);
+    expect(login.forms[0]?.file).toBe("app/ui/login-form.tsx");
+  });
+
+  it("resolves a redirect declared in that component into a post-submit target", () => {
+    expect(login.postSubmitTarget).toBe("/dashboard");
+  });
+
+  it("does not let one screen pull in an unbounded number of files", () => {
+    for (const screen of model.screens) {
+      expect(screen.sources.length).toBeLessThanOrEqual(24);
+    }
+  });
+});
+
+describe("multi-app uploads", () => {
+  const twoApps: SourceFile[] = [
+    pkg({ next: "^15.0.0" }),
+    { path: "examples/full/app/page.tsx", text: `<h1>Full</h1><Link href="/about">About</Link>` },
+    { path: "examples/full/app/about/page.tsx", text: `<h1>About</h1>` },
+    { path: "examples/full/app/contact/page.tsx", text: `<h1>Contact</h1>` },
+    { path: "examples/starter/app/page.tsx", text: `<h1>Starter</h1>` },
+  ];
+
+  it("analyses the largest app rather than merging routes that never connect", () => {
+    const model = buildProjectModel(twoApps, "Two apps");
+    expect(model.screens.map((s) => s.file).sort()).toEqual([
+      "examples/full/app/about/page.tsx",
+      "examples/full/app/contact/page.tsx",
+      "examples/full/app/page.tsx",
+    ]);
+  });
+
+  it("says so in the warnings rather than silently dropping the others", () => {
+    const model = buildProjectModel(twoApps, "Two apps");
+    expect(model.warnings.join(" ")).toMatch(/2 separate apps/);
+    expect(model.warnings.join(" ")).toMatch(/examples\/starter/);
+  });
+
+  it("stays quiet for a single-app upload", () => {
+    const model = buildProjectModel(
+      [pkg({ next: "^15.0.0" }), { path: "app/page.tsx", text: `<h1>Only</h1>` }],
+      "One app",
+    );
+    expect(model.warnings).toEqual([]);
+  });
+});

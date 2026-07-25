@@ -383,6 +383,7 @@ function navigableAffordances(screen: Screen, context: SimContext): Affordance[]
     iconOnly: false,
     named: form.submitLabel.length > 0,
     keyboardReachable: true,
+    file: form.file,
     line: form.line,
     order: screen.affordances.length,
   };

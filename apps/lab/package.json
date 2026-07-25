@@ -1,0 +1,30 @@
+{
+  "name": "@productlab/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Product Lab — landing page, project dashboard, and simulation reports.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "next dev --port 3100",
+    "build": "next build",
+    "start": "next start --port 3100",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@productlab/engine": "0.1.0",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}

@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── AI Product Lab tokens ───────────────────────────────────────────────
+     A darker, cooler surface than Ballast's, with a violet→cyan accent that
+     reads as "simulation" rather than "alert". Score colours are shared with
+     the report charts so a number and its bar always agree. */
+  --color-void: #05070f;
+  --color-surface: #0a0e1a;
+  --color-raised: #101728;
+  --color-elevated: #16203a;
+  --color-line: rgba(148, 163, 184, 0.14);
+  --color-line-bright: rgba(148, 163, 184, 0.28);
+
+  --color-ink: #e8ecf6;
+  --color-muted: #93a1ba;
+  --color-faint: #61708c;
+
+  --color-violet: #8b5cf6;
+  --color-violet-soft: #a78bfa;
+  --color-cyan: #22d3ee;
+  --color-cyan-soft: #67e8f9;
+
+  --color-good: #34d399;
+  --color-fair: #fbbf24;
+  --color-poor: #fb7185;
+  --color-info: #60a5fa;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in: fade-in 0.9s ease both;
+  --animate-drift: drift 26s linear infinite;
+  --animate-pulse-soft: pulse-soft 3.2s ease-in-out infinite;
+  --animate-sweep: sweep 2.4s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes drift {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-50%);
+    }
+  }
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes sweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(220%);
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The faint grid behind the hero: a lab bench, not a marketing gradient. */
+.grid-field {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+.accent-text {
+  background: linear-gradient(100deg, var(--color-cyan-soft), var(--color-violet-soft));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Respect the people this product is meant to find problems for. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: rgba(139, 92, 246, 0.32);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

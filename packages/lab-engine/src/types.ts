@@ -29,7 +29,10 @@ export interface Affordance {
   named: boolean;
   /** Reachable and operable with a keyboard (not a click handler on a <div>). */
   keyboardReachable: boolean;
-  /** Source line, for evidence links back into the repo. */
+  /** Repo-relative file this control is written in — a page, a layout, or a
+   * component the page renders. */
+  file: string;
+  /** Source line within `file`, for evidence links back into the repo. */
   line: number;
   /** 0-based order within the screen, used as a proxy for visual prominence. */
   order: number;
@@ -43,9 +46,19 @@ export interface FormField {
   line: number;
 }
 
+/** A source file that contributes to what a screen renders. */
+export interface ScreenSource {
+  path: string;
+  text: string;
+  /** How the file reaches the screen: the page itself, a layout, or an import. */
+  role: "page" | "layout" | "component";
+}
+
 export interface FormInfo {
   id: string;
   screenId: string;
+  /** Repo-relative file the form is written in. */
+  file: string;
   fields: FormField[];
   submitLabel: string;
   line: number;
@@ -56,8 +69,11 @@ export interface Screen {
   id: string;
   /** URL path, e.g. "/dashboard/[id]". */
   path: string;
-  /** Repo-relative source file. */
+  /** Repo-relative source file of the page component. */
   file: string;
+  /** Every file that contributes to this screen: the page, its layouts, and
+   * the local components they render. */
+  sources: ScreenSource[];
   /** Human title inferred from headings, metadata, or the path. */
   title: string;
   /** Screen sits behind an auth gate. */
@@ -324,6 +340,9 @@ export interface Report {
   business: BusinessOutlook;
   recommendations: Recommendation[];
   signals: StaticSignal[];
+  /** Caveats about what could and could not be read from the upload. Shown
+   * with the report, because a caveat the reader never sees is not a caveat. */
+  warnings: string[];
   /** A sample of verbatim feedback, one line per persona. */
   feedback: { personaId: string; persona: string; outcome: SessionOutcome; quote: string }[];
   /** How the report was produced — deterministic simulation, LLM-enriched, or both. */

@@ -1,8 +1,10 @@
 import { causeCategory, readableCause } from "./friction.js";
 import { describePersona } from "./personas.js";
+import { dominantCause, quoteFor } from "./quotes.js";
 import type {
   BusinessOutlook,
   FeatureAdoption,
+  FrictionPoint,
   FunnelStep,
   Persona,
   ProjectModel,
@@ -55,6 +57,7 @@ export function buildReport(
     business,
     recommendations,
     signals: model.signals,
+    warnings: model.warnings,
     feedback: sampleFeedback(sessions, personaById),
     provenance: { engineVersion: ENGINE_VERSION, seed: options.seed, llmEnriched: false },
   };
@@ -82,6 +85,8 @@ interface IssueBucket {
   lostSessions: Set<string>;
   weight: number;
   quotes: string[];
+  /** Sessions that hit this issue but complained about something else louder. */
+  candidates: { personaId: string; outcome: SessionOutcome; points: FrictionPoint[] }[];
 }
 
 /**
@@ -100,6 +105,12 @@ export function synthesiseIssues(
 
   for (const session of sessions) {
     const lost = session.outcome !== "success";
+    // A session's quote describes whatever frustrated it most. Attaching it to
+    // every issue the session touched would file a complaint about form labels
+    // as evidence for an auth wall, so a quote is only evidence for the issue
+    // it is actually about.
+    const spokenAbout = dominantCause(session.friction);
+
     for (const point of session.friction) {
       const key = `${point.cause}::${point.screenId}`;
       let bucket = buckets.get(key);
@@ -112,14 +123,26 @@ export function synthesiseIssues(
           lostSessions: new Set(),
           weight: 0,
           quotes: [],
+          candidates: [],
         };
         buckets.set(key, bucket);
       }
       bucket.sessions.add(session.personaId);
       if (lost) bucket.lostSessions.add(session.personaId);
       bucket.weight += point.weight;
-      if (bucket.quotes.length < 3 && session.quote && !bucket.quotes.includes(session.quote)) {
+      if (
+        spokenAbout === point.cause &&
+        bucket.quotes.length < 3 &&
+        session.quote &&
+        !bucket.quotes.includes(session.quote)
+      ) {
         bucket.quotes.push(session.quote);
+      } else if (bucket.candidates.length < 6) {
+        bucket.candidates.push({
+          personaId: session.personaId,
+          outcome: session.outcome,
+          points: [point],
+        });
       }
     }
   }
@@ -129,6 +152,8 @@ export function synthesiseIssues(
 
   for (const bucket of buckets.values()) {
     const screen = screenById.get(bucket.screenId);
+    fillEvidence(bucket, personaById, screen);
+    const location = locationFor(bucket, screen);
     const affectedShare = bucket.sessions.size / total;
     const sessionsLost = bucket.lostSessions.size;
     issues.push({
@@ -139,39 +164,67 @@ export function synthesiseIssues(
       affectedShare: round3(affectedShare),
       sessionsLost,
       screenId: bucket.screenId,
-      file: screen?.file ?? "unknown",
-      line: lineFor(bucket, screen),
+      file: location.file,
+      line: location.line,
       detail: issueDetail(bucket, screen, total),
       recommendation: fixFor(bucket.cause, screen),
       evidence: bucket.quotes,
     });
   }
 
-  void personaById;
   issues.sort((a, b) => b.sessionsLost - a.sessionsLost || b.affectedShare - a.affectedShare);
   return issues;
 }
 
-/** Resolve an issue back to the line a developer should open. */
-function lineFor(bucket: IssueBucket, screen: Screen | undefined): number {
-  if (!screen || !bucket.affordanceId) return 1;
+/**
+ * Top up an issue's evidence.
+ *
+ * A session only donates its own quote to the issue it complained loudest
+ * about, which leaves quieter issues with nothing. For those, ask a persona who
+ * actually hit this issue what *this* felt like — same template system, same
+ * voice, but scoped to this issue's friction alone. Nothing is attributed to a
+ * persona who never encountered it.
+ */
+function fillEvidence(
+  bucket: IssueBucket,
+  personaById: Map<string, Persona>,
+  screen: Screen | undefined,
+): void {
+  for (const candidate of bucket.candidates) {
+    if (bucket.quotes.length >= 3) return;
+    const persona = personaById.get(candidate.personaId);
+    if (!persona) continue;
+    const quote = quoteFor(persona, candidate.outcome, candidate.points, screen);
+    if (quote && !bucket.quotes.includes(quote)) bucket.quotes.push(quote);
+  }
+}
+
+/**
+ * Resolve an issue back to the exact place a developer should open.
+ *
+ * A screen is made of several files — the page, its layouts, the components
+ * they render — so the page path is usually the wrong answer. An issue caused
+ * by a sidebar link belongs to the layout that defines it.
+ */
+function locationFor(bucket: IssueBucket, screen: Screen | undefined): { file: string; line: number } {
+  const fallback = { file: screen?.file ?? "unknown", line: 1 };
+  if (!screen || !bucket.affordanceId) return fallback;
   const id = bucket.affordanceId;
 
   const affordance = screen.affordances.find((a) => a.id === id);
-  if (affordance) return affordance.line;
+  if (affordance) return { file: affordance.file, line: affordance.line };
 
   const fieldMatch = /^(.*):field:(.*)$/.exec(id);
   if (fieldMatch) {
     const form = screen.forms.find((f) => f.id === fieldMatch[1]);
     const field = form?.fields.find((f) => f.name === fieldMatch[2]);
-    if (field) return field.line;
-    if (form) return form.line;
+    if (form) return { file: form.file, line: field?.line ?? form.line };
   }
 
   const form = screen.forms.find((f) => id === f.id || id === `${f.id}:submit`);
-  if (form) return form.line;
+  if (form) return { file: form.file, line: form.line };
 
-  return 1;
+  return fallback;
 }
 
 function severityFor(affectedShare: number, lostShare: number): SignalSeverity {
@@ -356,7 +409,9 @@ export function predictAdoption(
 
 function verdictFor(adoption: number, demandShare: number, reachRate: number): FeatureAdoption["verdict"] {
   // Wanted but unreachable is the interesting case: it is a navigation problem
-  // wearing the costume of an unpopular feature.
+  // wearing the costume of an unpopular feature. A screen nobody could reach at
+  // all qualifies on a much lower bar than one that is merely awkward to find.
+  if (reachRate === 0 && demandShare > 0) return "invest";
   if (demandShare >= 0.05 && reachRate < 0.5) return "invest";
   if (demandShare >= 0.05) return "keep";
   if (adoption < 0.05 && demandShare < 0.03) return "defer";
