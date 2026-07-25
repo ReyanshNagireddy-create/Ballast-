@@ -1,0 +1,43 @@
+{
+  "name": "@productlab/engine",
+  "version": "0.1.0",
+  "description": "AI Product Lab simulation engine: builds a behavioural model of a React/Next.js app, generates AI personas, and simulates how they use the product.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ballast-dev/ballast",
+    "directory": "packages/lab-engine"
+  },
+  "keywords": [
+    "ai",
+    "simulation",
+    "personas",
+    "ux-research",
+    "product-analytics",
+    "react",
+    "nextjs"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
+}
