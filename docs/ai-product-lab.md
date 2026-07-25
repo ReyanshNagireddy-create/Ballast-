@@ -176,6 +176,29 @@ business projections are calibrated to move in the right direction when the
 product improves; use them to compare two versions of your own app, not to plan
 revenue. Then go and talk to five real users, with much better questions.
 
+## Not built yet
+
+Stated MVP scope that this does **not** cover, so nobody discovers it the hard
+way:
+
+- **Authentication.** There is none. Every route and every API endpoint is open,
+  and any caller can read any project or run. That is fine for `npm run dev:lab`
+  on a laptop and unacceptable anywhere else — the store holds uploaded source
+  code. Wiring in a real provider (the sibling `apps/web` uses Clerk) is the
+  first thing to do before this is reachable from a network. A local-only
+  password gate was deliberately not added: it would look like protection
+  without being any.
+- **Billing.** The pricing page is presentational. Plan limits exist in one
+  place (`MAX_PERSONAS` in `src/lib/run.ts`) and are enforced server-side, but
+  nothing is charged and no plan is associated with a project.
+- **Persistence beyond a directory.** Projects and runs are JSON files. The
+  shape matches what a Postgres schema would hold, so it is a swap rather than a
+  rewrite, but concurrent writers are not coordinated.
+
+Non-MVP items from the roadmap — mobile and native simulation, video replay of
+sessions, team workspaces, Slack/Discord notifications, competitor comparison,
+AI-generated pull requests, continuous post-deploy monitoring — are untouched.
+
 ## Tests
 
 ```console
