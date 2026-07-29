@@ -3,139 +3,222 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1A0000000000000000000012 /* VeritasKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1A0000000000000000000011 /* VeritasKit */; };
+		2CB417F03CA77DD70C4FDB5A /* VeritasKit in Frameworks */ = {isa = PBXBuildFile; productRef = B050E3EB3F45558E725458D7 /* VeritasKit */; };
+		89F0C3F40F3CC640240D8127 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA6D714CCE44F3D68FE735F3 /* Theme.swift */; };
+		9AC6944D61F84E7F3016C5E5 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BC56BEF5CD9BC036CB6E0B /* AppStore.swift */; };
+		5B0227E88340ED06CD048B7B /* DebateSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6167B7E76DDB38B901E17D /* DebateSession.swift */; };
+		18B9BF0908A9DF54EDB16D24 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2982ACF605130614F36380 /* Keychain.swift */; };
+		F655146B6D9B732719681929 /* VeritasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA38048070E76CDF23E33D8F /* VeritasApp.swift */; };
+		760427358D1FFEEDC150F39D /* DebateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD83206F032038F999249C1 /* DebateRoomView.swift */; };
+		527F7C291B04828F903AC7C9 /* DictationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C7307C0BE9C9A4CB7D76 /* DictationButton.swift */; };
+		E2D53F633860BFA6EB43443B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE63C97D0D965EBF37CD48BE /* HistoryView.swift */; };
+		90DED613D1D54A33FAA60C32 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD2018FAB468624030ABFED /* HomeView.swift */; };
+		E175D6D553C4A1F6427E4B07 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE30165E490D527798FCA5D /* LibraryView.swift */; };
+		12CCF2167BA2CA67E3397A8F /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A86EAA9533A0B56D4AA921A /* ReportView.swift */; };
+		1999EED209CF8D49151260FC /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D387A97803587DBB369388A /* RootView.swift */; };
+		4211AE5091F5C7B0625B3857 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F0702D5B0F86035086C26 /* SettingsView.swift */; };
+		C7794B5D912199FAD1B3453E /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ABC3CB6C65A939CF7FCC18 /* SetupView.swift */; };
+		3E68B095CB0EABD6566AAD8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 106D49302F1D944B45142836 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1A0000000000000000000005 /* Veritas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Veritas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		21DAE3DC924DD4C1483D3FB0 /* Veritas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Veritas.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA6D714CCE44F3D68FE735F3 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		74BC56BEF5CD9BC036CB6E0B /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		EF6167B7E76DDB38B901E17D /* DebateSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateSession.swift; sourceTree = "<group>"; };
+		3F2982ACF605130614F36380 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		FA38048070E76CDF23E33D8F /* VeritasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeritasApp.swift; sourceTree = "<group>"; };
+		4AD83206F032038F999249C1 /* DebateRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateRoomView.swift; sourceTree = "<group>"; };
+		4973C7307C0BE9C9A4CB7D76 /* DictationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationButton.swift; sourceTree = "<group>"; };
+		AE63C97D0D965EBF37CD48BE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		7AD2018FAB468624030ABFED /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		1EE30165E490D527798FCA5D /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		3A86EAA9533A0B56D4AA921A /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
+		6D387A97803587DBB369388A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		507F0702D5B0F86035086C26 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		62ABC3CB6C65A939CF7FCC18 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		106D49302F1D944B45142836 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		62DD56E7CA71D03BD4DA5EDD /* Veritas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Veritas.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		1A0000000000000000000006 /* Veritas */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Veritas; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
-		1A0000000000000000000008 /* Frameworks */ = {
+		019BAB185F97B56993A7087D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1A0000000000000000000012 /* VeritasKit in Frameworks */,
+				2CB417F03CA77DD70C4FDB5A /* VeritasKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1A0000000000000000000002 = {
+		95DCA4FAD37A9AFAE210AF0B = {
 			isa = PBXGroup;
 			children = (
-				1A0000000000000000000006 /* Veritas */,
-				1A0000000000000000000003 /* Products */,
+				7824C56D1034E65D313C9FC1 /* Veritas */,
+				31793280A19CDC7880B10A8E /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		1A0000000000000000000003 /* Products */ = {
+		31793280A19CDC7880B10A8E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1A0000000000000000000005 /* Veritas.app */,
+				21DAE3DC924DD4C1483D3FB0 /* Veritas.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		7824C56D1034E65D313C9FC1 /* Veritas */ = {
+			isa = PBXGroup;
+			children = (
+				BB791F5F63079A5D20276769 /* Design */,
+				96C62026CDBE4917CDD3A21B /* State */,
+				45E1AB31BDBC9695BA88192F /* Views */,
+				106D49302F1D944B45142836 /* Assets.xcassets */,
+				62DD56E7CA71D03BD4DA5EDD /* Veritas.entitlements */,
+				FA38048070E76CDF23E33D8F /* VeritasApp.swift */,
+			);
+			path = Veritas;
+			sourceTree = "<group>";
+		};
+		BB791F5F63079A5D20276769 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				EA6D714CCE44F3D68FE735F3 /* Theme.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		96C62026CDBE4917CDD3A21B /* State */ = {
+			isa = PBXGroup;
+			children = (
+				74BC56BEF5CD9BC036CB6E0B /* AppStore.swift */,
+				EF6167B7E76DDB38B901E17D /* DebateSession.swift */,
+				3F2982ACF605130614F36380 /* Keychain.swift */,
+			);
+			path = State;
+			sourceTree = "<group>";
+		};
+		45E1AB31BDBC9695BA88192F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4AD83206F032038F999249C1 /* DebateRoomView.swift */,
+				4973C7307C0BE9C9A4CB7D76 /* DictationButton.swift */,
+				AE63C97D0D965EBF37CD48BE /* HistoryView.swift */,
+				7AD2018FAB468624030ABFED /* HomeView.swift */,
+				1EE30165E490D527798FCA5D /* LibraryView.swift */,
+				3A86EAA9533A0B56D4AA921A /* ReportView.swift */,
+				6D387A97803587DBB369388A /* RootView.swift */,
+				507F0702D5B0F86035086C26 /* SettingsView.swift */,
+				62ABC3CB6C65A939CF7FCC18 /* SetupView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1A0000000000000000000004 /* Veritas */ = {
+		C9BC3744BEE76653472F474C /* Veritas */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1A000000000000000000000B /* Build configuration list for PBXNativeTarget "Veritas" */;
+			buildConfigurationList = A886B50DF087AEF7B87CDC65 /* Build configuration list for PBXNativeTarget "Veritas" */;
 			buildPhases = (
-				1A0000000000000000000007 /* Sources */,
-				1A0000000000000000000008 /* Frameworks */,
-				1A0000000000000000000009 /* Resources */,
+				C2511B36F0F0E810A9E46328 /* Sources */,
+				019BAB185F97B56993A7087D /* Frameworks */,
+				C2112B99FC6905E49DE55430 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				1A0000000000000000000006 /* Veritas */,
-			);
 			name = Veritas;
 			packageProductDependencies = (
-				1A0000000000000000000011 /* VeritasKit */,
+				B050E3EB3F45558E725458D7 /* VeritasKit */,
 			);
 			productName = Veritas;
-			productReference = 1A0000000000000000000005 /* Veritas.app */;
+			productReference = 21DAE3DC924DD4C1483D3FB0 /* Veritas.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		1A0000000000000000000001 /* Project object */ = {
+		98F54143AB4E86B28C3AFEE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
-				LastUpgradeCheck = 1600;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					1A0000000000000000000004 = {
-						CreatedOnToolsVersion = 16.0;
+					C9BC3744BEE76653472F474C = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
-			buildConfigurationList = 1A000000000000000000000A /* Build configuration list for PBXProject "Veritas" */;
-			compatibilityVersion = "Xcode 15.0";
+			buildConfigurationList = 26E84C2B3712F7DFAC8AD93F /* Build configuration list for PBXProject "Veritas" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 1A0000000000000000000002;
-			minimizedProjectReferenceProxies = 1;
+			mainGroup = 95DCA4FAD37A9AFAE210AF0B;
 			packageReferences = (
-				1A0000000000000000000010 /* XCLocalSwiftPackageReference "Packages/VeritasKit" */,
+				F7489979BE3FCD4094C9B8F5 /* XCLocalSwiftPackageReference "Packages/VeritasKit" */,
 			);
-			preferredProjectObjectVersion = 77;
-			productRefGroup = 1A0000000000000000000003 /* Products */;
+			productRefGroup = 31793280A19CDC7880B10A8E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1A0000000000000000000004 /* Veritas */,
+				C9BC3744BEE76653472F474C /* Veritas */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1A0000000000000000000009 /* Resources */ = {
+		C2112B99FC6905E49DE55430 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E68B095CB0EABD6566AAD8C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		1A0000000000000000000007 /* Sources */ = {
+		C2511B36F0F0E810A9E46328 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89F0C3F40F3CC640240D8127 /* Theme.swift in Sources */,
+				9AC6944D61F84E7F3016C5E5 /* AppStore.swift in Sources */,
+				5B0227E88340ED06CD048B7B /* DebateSession.swift in Sources */,
+				18B9BF0908A9DF54EDB16D24 /* Keychain.swift in Sources */,
+				F655146B6D9B732719681929 /* VeritasApp.swift in Sources */,
+				760427358D1FFEEDC150F39D /* DebateRoomView.swift in Sources */,
+				527F7C291B04828F903AC7C9 /* DictationButton.swift in Sources */,
+				E2D53F633860BFA6EB43443B /* HistoryView.swift in Sources */,
+				90DED613D1D54A33FAA60C32 /* HomeView.swift in Sources */,
+				E175D6D553C4A1F6427E4B07 /* LibraryView.swift in Sources */,
+				12CCF2167BA2CA67E3397A8F /* ReportView.swift in Sources */,
+				1999EED209CF8D49151260FC /* RootView.swift in Sources */,
+				4211AE5091F5C7B0625B3857 /* SettingsView.swift in Sources */,
+				C7794B5D912199FAD1B3453E /* SetupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		1A000000000000000000000C /* Debug */ = {
+		70DCC1EB255A5F3C8D9ED349 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -145,33 +228,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		1A000000000000000000000D /* Release */ = {
+		C3DCEEC1E0EB17A5583B8E94 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -180,50 +254,34 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		1A000000000000000000000E /* Debug */ = {
+		DB189EBE9D4E38495C3C7EF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = Veritas/Veritas.entitlements;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = Veritas/Veritas.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Veritas;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Veritas uses the microphone so you can speak your turn instead of typing it.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Veritas transcribes your spoken turn so the referee can analyse what was said.";
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad[sdk=iphoneos*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad[sdk=iphonesimulator*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone[sdk=iphoneos*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone[sdk=iphonesimulator*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.veritas.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -232,34 +290,22 @@
 			};
 			name = Debug;
 		};
-		1A000000000000000000000F /* Release */ = {
+		032222C0BAA33BC7119DFAF1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = Veritas/Veritas.entitlements;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = Veritas/Veritas.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Veritas;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Veritas uses the microphone so you can speak your turn instead of typing it.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Veritas transcribes your spoken turn so the referee can analyse what was said.";
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad[sdk=iphoneos*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad[sdk=iphonesimulator*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone[sdk=iphoneos*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone[sdk=iphonesimulator*]" = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.veritas.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -271,20 +317,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1A000000000000000000000A /* Build configuration list for PBXProject "Veritas" */ = {
+		26E84C2B3712F7DFAC8AD93F /* Build configuration list for PBXProject "Veritas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1A000000000000000000000C /* Debug */,
-				1A000000000000000000000D /* Release */,
+				70DCC1EB255A5F3C8D9ED349 /* Debug */,
+				C3DCEEC1E0EB17A5583B8E94 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1A000000000000000000000B /* Build configuration list for PBXNativeTarget "Veritas" */ = {
+		A886B50DF087AEF7B87CDC65 /* Build configuration list for PBXNativeTarget "Veritas" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				1A000000000000000000000E /* Debug */,
-				1A000000000000000000000F /* Release */,
+				DB189EBE9D4E38495C3C7EF5 /* Debug */,
+				032222C0BAA33BC7119DFAF1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -292,18 +338,18 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		1A0000000000000000000010 /* XCLocalSwiftPackageReference "Packages/VeritasKit" */ = {
+		F7489979BE3FCD4094C9B8F5 /* XCLocalSwiftPackageReference "Packages/VeritasKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/VeritasKit;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1A0000000000000000000011 /* VeritasKit */ = {
+		B050E3EB3F45558E725458D7 /* VeritasKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = VeritasKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 1A0000000000000000000001 /* Project object */;
+	rootObject = 98F54143AB4E86B28C3AFEE0 /* Project object */;
 }

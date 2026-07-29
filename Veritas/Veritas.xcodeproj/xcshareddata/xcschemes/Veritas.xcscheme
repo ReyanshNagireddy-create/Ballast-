@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1600"
+   LastUpgradeVersion = "1500"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1A0000000000000000000004"
+               BlueprintIdentifier = "C9BC3744BEE76653472F474C"
                BuildableName = "Veritas.app"
                BlueprintName = "Veritas"
                ReferencedContainer = "container:Veritas.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1A0000000000000000000004"
+            BlueprintIdentifier = "C9BC3744BEE76653472F474C"
             BuildableName = "Veritas.app"
             BlueprintName = "Veritas"
             ReferencedContainer = "container:Veritas.xcodeproj">
@@ -61,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1A0000000000000000000004"
+            BlueprintIdentifier = "C9BC3744BEE76653472F474C"
             BuildableName = "Veritas.app"
             BlueprintName = "Veritas"
             ReferencedContainer = "container:Veritas.xcodeproj">

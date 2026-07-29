@@ -33,6 +33,9 @@ Veritas/
 
 ## Building
 
+From the repository root, on the `claude/veritas-debate-platform-r1lrji`
+branch:
+
 ```bash
 open Veritas/Veritas.xcodeproj    # then ⌘R — pick "My Mac" or a simulator
 ```
@@ -44,6 +47,28 @@ network needed. Tests can be run without Xcode:
 cd Veritas/Packages/VeritasKit
 swift test
 ```
+
+### If Xcode shows nothing
+
+1. **Check you are on the branch.** `Veritas/` does not exist on `main`.
+   ```bash
+   git fetch origin && git checkout claude/veritas-debate-platform-r1lrji && git pull
+   ls Veritas/Veritas.xcodeproj      # should list project.pbxproj
+   ```
+2. **Open the `.xcodeproj`, not the folder.** `Veritas/` is a directory;
+   the project is `Veritas/Veritas.xcodeproj`. Opening the repository root
+   in Xcode shows you a folder, not an app.
+3. **Regenerate the project.** It is written by a script rather than by
+   Xcode, so it can be rebuilt from whatever is on disk:
+   ```bash
+   cd Veritas && python3 Tools/generate-xcodeproj.py
+   ```
+   Run this after adding or deleting any file under `Veritas/Veritas/` —
+   the classic pbxproj format lists every file explicitly, and the script
+   keeps that list and the shared scheme's target identifier in sync.
+4. **Worst case, the engine stands alone.** `File ▸ Open` on
+   `Veritas/Packages/VeritasKit/Package.swift` opens VeritasKit as a
+   package with no app target involved, and ⌘U runs the full test suite.
 
 > **This project has never been compiled.** It was written in a Linux
 > container with no macOS and no Swift toolchain available — `swift.org`
