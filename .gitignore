@@ -30,3 +30,11 @@ coverage/
 # misc
 .turbo/
 .vercel/
+
+# xcode / swift
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.swiftpm/
+Package.resolved
+**/.build/
