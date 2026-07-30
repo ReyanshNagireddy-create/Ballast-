@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 /// Progress over time, plus every debate you have finished.
 struct HistoryView: View {

@@ -40,13 +40,22 @@ branch:
 open Veritas/Veritas.xcodeproj    # then ⌘R — pick "My Mac" or a simulator
 ```
 
-The engine has no dependencies, so there is nothing to resolve and no
-network needed. Tests can be run without Xcode:
+There is nothing to resolve and no network needed: the engine has no
+dependencies, and the app target compiles its sources directly rather than
+linking it as a Swift package. That is why no file under `Veritas/Veritas/`
+says `import VeritasKit` — in the app they are all one module. The package
+is still a real package, and the tests run against it on its own:
 
 ```bash
 cd Veritas/Packages/VeritasKit
 swift test
 ```
+
+The reason for compiling in rather than linking: a local package reference
+(`XCLocalSwiftPackageReference`) needs Xcode 15+, and a project Xcode
+refuses to parse opens as an empty window with no useful error. With it
+gone, `project.pbxproj` contains nothing newer than Xcode 4 understands —
+worth the lost module boundary on a project that cannot be built here.
 
 ### If Xcode shows nothing
 
@@ -63,9 +72,11 @@ swift test
    ```bash
    cd Veritas && python3 Tools/generate-xcodeproj.py
    ```
-   Run this after adding or deleting any file under `Veritas/Veritas/` —
-   the classic pbxproj format lists every file explicitly, and the script
-   keeps that list and the shared scheme's target identifier in sync.
+   Run this after adding or deleting any Swift file — the classic pbxproj
+   format lists every file explicitly, and the script keeps that list and
+   the shared scheme's target identifier in sync. A stale identifier in
+   the scheme is the difference between an app you can run and an Xcode
+   window with no scheme in the toolbar.
 4. **Worst case, the engine stands alone.** `File ▸ Open` on
    `Veritas/Packages/VeritasKit/Package.swift` opens VeritasKit as a
    package with no app target involved, and ⌘U runs the full test suite.

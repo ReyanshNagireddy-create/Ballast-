@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 struct ReportView: View {
 

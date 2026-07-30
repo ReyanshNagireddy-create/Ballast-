@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 enum SetupKind: Hashable {
     case twoPlayer

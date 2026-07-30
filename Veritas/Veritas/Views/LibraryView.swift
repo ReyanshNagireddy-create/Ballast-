@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 /// The reference: every fallacy Veritas can name, and what each of the six
 /// scores actually measures.

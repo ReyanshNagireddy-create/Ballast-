@@ -7,42 +7,89 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2CB417F03CA77DD70C4FDB5A /* VeritasKit in Frameworks */ = {isa = PBXBuildFile; productRef = B050E3EB3F45558E725458D7 /* VeritasKit */; };
-		89F0C3F40F3CC640240D8127 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA6D714CCE44F3D68FE735F3 /* Theme.swift */; };
-		9AC6944D61F84E7F3016C5E5 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BC56BEF5CD9BC036CB6E0B /* AppStore.swift */; };
-		5B0227E88340ED06CD048B7B /* DebateSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6167B7E76DDB38B901E17D /* DebateSession.swift */; };
-		18B9BF0908A9DF54EDB16D24 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2982ACF605130614F36380 /* Keychain.swift */; };
-		F655146B6D9B732719681929 /* VeritasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA38048070E76CDF23E33D8F /* VeritasApp.swift */; };
-		760427358D1FFEEDC150F39D /* DebateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD83206F032038F999249C1 /* DebateRoomView.swift */; };
-		527F7C291B04828F903AC7C9 /* DictationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4973C7307C0BE9C9A4CB7D76 /* DictationButton.swift */; };
-		E2D53F633860BFA6EB43443B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE63C97D0D965EBF37CD48BE /* HistoryView.swift */; };
-		90DED613D1D54A33FAA60C32 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD2018FAB468624030ABFED /* HomeView.swift */; };
-		E175D6D553C4A1F6427E4B07 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EE30165E490D527798FCA5D /* LibraryView.swift */; };
-		12CCF2167BA2CA67E3397A8F /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A86EAA9533A0B56D4AA921A /* ReportView.swift */; };
-		1999EED209CF8D49151260FC /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D387A97803587DBB369388A /* RootView.swift */; };
-		4211AE5091F5C7B0625B3857 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F0702D5B0F86035086C26 /* SettingsView.swift */; };
-		C7794B5D912199FAD1B3453E /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62ABC3CB6C65A939CF7FCC18 /* SetupView.swift */; };
-		3E68B095CB0EABD6566AAD8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 106D49302F1D944B45142836 /* Assets.xcassets */; };
+		31731B9E587881E500831B09 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4FC447DCD1CE2C7A0DA44E /* Theme.swift */; };
+		4D6A072A02D1903CAE129D5B /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C005B8DA6144284D68D76A1 /* AppStore.swift */; };
+		27E2E1B5043733B60310BCAB /* DebateSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41173EFB555AC44F88367E30 /* DebateSession.swift */; };
+		295E1259145DDEBC27B572F8 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB77CDE5BCEF8BD76F2B9984 /* Keychain.swift */; };
+		1827777674F13E509F770831 /* VeritasApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A93AB7E2A5A41A7684222 /* VeritasApp.swift */; };
+		BEEAFFD2CB797682F8CE0570 /* DebateRoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62517997448F10DE3291F96C /* DebateRoomView.swift */; };
+		D0F1F35CB310B1F550DB5822 /* DictationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2789AB560D689A9345E38509 /* DictationButton.swift */; };
+		153A67781F337F4392269D5D /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD219BD525A2E83D3F442FD /* HistoryView.swift */; };
+		00493F2B555EEB50D489D8D2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1011199348653CF6681CABAE /* HomeView.swift */; };
+		AE239A5412FF70C9EE7DC0EC /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9746C5E97B9B2729059B61BB /* LibraryView.swift */; };
+		343652014B5A323153184690 /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6036DAC8B87714E68D8F3714 /* ReportView.swift */; };
+		6EAB5C1B0AF2B6139FA8CE16 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2044B018DCA24AE922472B /* RootView.swift */; };
+		18762BBA92580C068169728C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F02C93F690A81F3D6A6AD52 /* SettingsView.swift */; };
+		77BFC24D65C641D449D15490 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33ED0A044B85E48BC779C783 /* SetupView.swift */; };
+		045B9511DFDCD54879ADB85B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16D2F3EE9E94F83BC3878874 /* Assets.xcassets */; };
+		75E294226F1886C922B56111 /* CivilityAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF454D10FC17B7525C0ACBF /* CivilityAnalyzer.swift */; };
+		9E30A04688EDD817BBE1896F /* ClaimExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B335511027332645650397C /* ClaimExtractor.swift */; };
+		195EDB5EE367D9A745FFC297 /* ConsistencyAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193DC4C65941891EACF647FA /* ConsistencyAnalyzer.swift */; };
+		B120775EEFB0405F7BD00480 /* EvidenceAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E106ADF14F2E2DAB82851818 /* EvidenceAnalyzer.swift */; };
+		F3864A1C46FF26D843DA86F6 /* FallacyDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9595534FB05544FC85B26B8 /* FallacyDetector.swift */; };
+		1F8308E503D1A11A52522D51 /* RebuttalAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BB3C7BD4CF27943CF73355 /* RebuttalAnalyzer.swift */; };
+		ABA2A0B40BFF1510601E66A6 /* ReportBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AA3FDF3AA7C5951547A5AC /* ReportBuilder.swift */; };
+		79EA8156CC4460F03A725A2A /* Scorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5E925456D0BBF568152D74 /* Scorer.swift */; };
+		AF9DDBC6990EDC219EADADBA /* Persona.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC1438DD3DC305D61D732E8 /* Persona.swift */; };
+		891EB85EDF98B212948F7D78 /* SparringPartner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81AC2770915771A1A3A6E98B /* SparringPartner.swift */; };
+		901F30764B3F94C094255946 /* LiveReferee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38C02E1D97E41B0FB9EB4491 /* LiveReferee.swift */; };
+		05C66552C5E90D53DADCDAF9 /* Claim.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADD62675E1632FBCE4D7A4BC /* Claim.swift */; };
+		8D8B1E464089E746F8B8A4E5 /* Fallacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631197A912ABEDEC67E27AC2 /* Fallacy.swift */; };
+		3E40DCBE975A410CD591228F /* Finding.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADA8C0034ACFFF881746D7E7 /* Finding.swift */; };
+		920107377327A2724E0FB91C /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2724C4D2D9F422FD921EF82E /* Report.swift */; };
+		54D6B2EF52683279C68EBA11 /* Scorecard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60D76D1FA7FAB09A36DB6B /* Scorecard.swift */; };
+		36BCC4D82050779AF6D012F9 /* Transcript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE622BFCC6E8927A908BD03 /* Transcript.swift */; };
+		14662DBA585BBCFA5FCF8AC4 /* LanguageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF61C25801E0A7012A90E07 /* LanguageModel.swift */; };
+		3C7593770B47787BA68C5F7A /* ModelAugmentedReferee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79146AC36EBBDE699CCFBA60 /* ModelAugmentedReferee.swift */; };
+		79E5F9A9755BC31ECE785322 /* Referee.swift in Sources */ = {isa = PBXBuildFile; fileRef = A388782BFB1144D63DA70C99 /* Referee.swift */; };
+		B871EB84D42E1700752B3AD5 /* ReportFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD38AFFFD6A3584D9B3FAF14 /* ReportFormatter.swift */; };
+		6D4CB3DB112A209EDBB5F0B6 /* SampleDebates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EA9AA3043D181E87E2BDE0 /* SampleDebates.swift */; };
+		FC8CF95396467684D0853352 /* Lexicon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138FCA89C31BC4B2E171CC2E /* Lexicon.swift */; };
+		420ED604E95FF56CF19A4B90 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D948A52DF0507F787824DC0 /* Tokenizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		21DAE3DC924DD4C1483D3FB0 /* Veritas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Veritas.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA6D714CCE44F3D68FE735F3 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		74BC56BEF5CD9BC036CB6E0B /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
-		EF6167B7E76DDB38B901E17D /* DebateSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateSession.swift; sourceTree = "<group>"; };
-		3F2982ACF605130614F36380 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
-		FA38048070E76CDF23E33D8F /* VeritasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeritasApp.swift; sourceTree = "<group>"; };
-		4AD83206F032038F999249C1 /* DebateRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateRoomView.swift; sourceTree = "<group>"; };
-		4973C7307C0BE9C9A4CB7D76 /* DictationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationButton.swift; sourceTree = "<group>"; };
-		AE63C97D0D965EBF37CD48BE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		7AD2018FAB468624030ABFED /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		1EE30165E490D527798FCA5D /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
-		3A86EAA9533A0B56D4AA921A /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
-		6D387A97803587DBB369388A /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		507F0702D5B0F86035086C26 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		62ABC3CB6C65A939CF7FCC18 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
-		106D49302F1D944B45142836 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		62DD56E7CA71D03BD4DA5EDD /* Veritas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Veritas.entitlements; sourceTree = "<group>"; };
+		0C4FC447DCD1CE2C7A0DA44E /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		1C005B8DA6144284D68D76A1 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		41173EFB555AC44F88367E30 /* DebateSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateSession.swift; sourceTree = "<group>"; };
+		CB77CDE5BCEF8BD76F2B9984 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		288A93AB7E2A5A41A7684222 /* VeritasApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeritasApp.swift; sourceTree = "<group>"; };
+		62517997448F10DE3291F96C /* DebateRoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebateRoomView.swift; sourceTree = "<group>"; };
+		2789AB560D689A9345E38509 /* DictationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationButton.swift; sourceTree = "<group>"; };
+		8DD219BD525A2E83D3F442FD /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		1011199348653CF6681CABAE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		9746C5E97B9B2729059B61BB /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		6036DAC8B87714E68D8F3714 /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
+		5A2044B018DCA24AE922472B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		0F02C93F690A81F3D6A6AD52 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		33ED0A044B85E48BC779C783 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
+		16D2F3EE9E94F83BC3878874 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4B6E56C02952EE9EBD688142 /* Veritas.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Veritas.entitlements; sourceTree = "<group>"; };
+		DDF454D10FC17B7525C0ACBF /* CivilityAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CivilityAnalyzer.swift; sourceTree = "<group>"; };
+		7B335511027332645650397C /* ClaimExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimExtractor.swift; sourceTree = "<group>"; };
+		193DC4C65941891EACF647FA /* ConsistencyAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsistencyAnalyzer.swift; sourceTree = "<group>"; };
+		E106ADF14F2E2DAB82851818 /* EvidenceAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EvidenceAnalyzer.swift; sourceTree = "<group>"; };
+		B9595534FB05544FC85B26B8 /* FallacyDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FallacyDetector.swift; sourceTree = "<group>"; };
+		F8BB3C7BD4CF27943CF73355 /* RebuttalAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RebuttalAnalyzer.swift; sourceTree = "<group>"; };
+		17AA3FDF3AA7C5951547A5AC /* ReportBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportBuilder.swift; sourceTree = "<group>"; };
+		BB5E925456D0BBF568152D74 /* Scorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scorer.swift; sourceTree = "<group>"; };
+		6DC1438DD3DC305D61D732E8 /* Persona.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persona.swift; sourceTree = "<group>"; };
+		81AC2770915771A1A3A6E98B /* SparringPartner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparringPartner.swift; sourceTree = "<group>"; };
+		38C02E1D97E41B0FB9EB4491 /* LiveReferee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveReferee.swift; sourceTree = "<group>"; };
+		ADD62675E1632FBCE4D7A4BC /* Claim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Claim.swift; sourceTree = "<group>"; };
+		631197A912ABEDEC67E27AC2 /* Fallacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fallacy.swift; sourceTree = "<group>"; };
+		ADA8C0034ACFFF881746D7E7 /* Finding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finding.swift; sourceTree = "<group>"; };
+		2724C4D2D9F422FD921EF82E /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
+		7B60D76D1FA7FAB09A36DB6B /* Scorecard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scorecard.swift; sourceTree = "<group>"; };
+		3AE622BFCC6E8927A908BD03 /* Transcript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transcript.swift; sourceTree = "<group>"; };
+		3CF61C25801E0A7012A90E07 /* LanguageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageModel.swift; sourceTree = "<group>"; };
+		79146AC36EBBDE699CCFBA60 /* ModelAugmentedReferee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelAugmentedReferee.swift; sourceTree = "<group>"; };
+		A388782BFB1144D63DA70C99 /* Referee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Referee.swift; sourceTree = "<group>"; };
+		CD38AFFFD6A3584D9B3FAF14 /* ReportFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportFormatter.swift; sourceTree = "<group>"; };
+		75EA9AA3043D181E87E2BDE0 /* SampleDebates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDebates.swift; sourceTree = "<group>"; };
+		138FCA89C31BC4B2E171CC2E /* Lexicon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lexicon.swift; sourceTree = "<group>"; };
+		4D948A52DF0507F787824DC0 /* Tokenizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,17 +97,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CB417F03CA77DD70C4FDB5A /* VeritasKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		95DCA4FAD37A9AFAE210AF0B = {
+		361FF3508AF23F4E0CB329EA = {
 			isa = PBXGroup;
 			children = (
-				7824C56D1034E65D313C9FC1 /* Veritas */,
+				E2B75F5DA3B8BB7174BC8020 /* Veritas */,
+				440C105B3BC2042F5C8A2E8E /* VeritasKit */,
 				31793280A19CDC7880B10A8E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,51 +120,139 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7824C56D1034E65D313C9FC1 /* Veritas */ = {
+		E2B75F5DA3B8BB7174BC8020 /* Veritas */ = {
 			isa = PBXGroup;
 			children = (
-				BB791F5F63079A5D20276769 /* Design */,
-				96C62026CDBE4917CDD3A21B /* State */,
-				45E1AB31BDBC9695BA88192F /* Views */,
-				106D49302F1D944B45142836 /* Assets.xcassets */,
-				62DD56E7CA71D03BD4DA5EDD /* Veritas.entitlements */,
-				FA38048070E76CDF23E33D8F /* VeritasApp.swift */,
+				8D4A546062B56447BD259F3A /* Design */,
+				49930512DC39F6657EAD43C7 /* State */,
+				A36ED3DF83E6B3C1D6BC92D4 /* Views */,
+				16D2F3EE9E94F83BC3878874 /* Assets.xcassets */,
+				4B6E56C02952EE9EBD688142 /* Veritas.entitlements */,
+				288A93AB7E2A5A41A7684222 /* VeritasApp.swift */,
 			);
 			path = Veritas;
 			sourceTree = "<group>";
 		};
-		BB791F5F63079A5D20276769 /* Design */ = {
+		8D4A546062B56447BD259F3A /* Design */ = {
 			isa = PBXGroup;
 			children = (
-				EA6D714CCE44F3D68FE735F3 /* Theme.swift */,
+				0C4FC447DCD1CE2C7A0DA44E /* Theme.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
 		};
-		96C62026CDBE4917CDD3A21B /* State */ = {
+		49930512DC39F6657EAD43C7 /* State */ = {
 			isa = PBXGroup;
 			children = (
-				74BC56BEF5CD9BC036CB6E0B /* AppStore.swift */,
-				EF6167B7E76DDB38B901E17D /* DebateSession.swift */,
-				3F2982ACF605130614F36380 /* Keychain.swift */,
+				1C005B8DA6144284D68D76A1 /* AppStore.swift */,
+				41173EFB555AC44F88367E30 /* DebateSession.swift */,
+				CB77CDE5BCEF8BD76F2B9984 /* Keychain.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
 		};
-		45E1AB31BDBC9695BA88192F /* Views */ = {
+		A36ED3DF83E6B3C1D6BC92D4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				4AD83206F032038F999249C1 /* DebateRoomView.swift */,
-				4973C7307C0BE9C9A4CB7D76 /* DictationButton.swift */,
-				AE63C97D0D965EBF37CD48BE /* HistoryView.swift */,
-				7AD2018FAB468624030ABFED /* HomeView.swift */,
-				1EE30165E490D527798FCA5D /* LibraryView.swift */,
-				3A86EAA9533A0B56D4AA921A /* ReportView.swift */,
-				6D387A97803587DBB369388A /* RootView.swift */,
-				507F0702D5B0F86035086C26 /* SettingsView.swift */,
-				62ABC3CB6C65A939CF7FCC18 /* SetupView.swift */,
+				62517997448F10DE3291F96C /* DebateRoomView.swift */,
+				2789AB560D689A9345E38509 /* DictationButton.swift */,
+				8DD219BD525A2E83D3F442FD /* HistoryView.swift */,
+				1011199348653CF6681CABAE /* HomeView.swift */,
+				9746C5E97B9B2729059B61BB /* LibraryView.swift */,
+				6036DAC8B87714E68D8F3714 /* ReportView.swift */,
+				5A2044B018DCA24AE922472B /* RootView.swift */,
+				0F02C93F690A81F3D6A6AD52 /* SettingsView.swift */,
+				33ED0A044B85E48BC779C783 /* SetupView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		440C105B3BC2042F5C8A2E8E /* VeritasKit */ = {
+			isa = PBXGroup;
+			children = (
+				E9F808E71F2653E96F8CFEEB /* Analysis */,
+				D25B935E7F1F1274941A4497 /* Coach */,
+				4DEA2C0FF8EB02B919D7F36D /* Live */,
+				AAA932E52E39C9EE0BD8C75E /* Model */,
+				8F944076A365A09BF000AC86 /* Providers */,
+				1E7DF78C9ADD1B6F16071316 /* Support */,
+				4F839B075CD2BBE47EC5F4D0 /* Text */,
+				A388782BFB1144D63DA70C99 /* Referee.swift */,
+			);
+			name = VeritasKit;
+			path = Packages/VeritasKit/Sources/VeritasKit;
+			sourceTree = "<group>";
+		};
+		E9F808E71F2653E96F8CFEEB /* Analysis */ = {
+			isa = PBXGroup;
+			children = (
+				DDF454D10FC17B7525C0ACBF /* CivilityAnalyzer.swift */,
+				7B335511027332645650397C /* ClaimExtractor.swift */,
+				193DC4C65941891EACF647FA /* ConsistencyAnalyzer.swift */,
+				E106ADF14F2E2DAB82851818 /* EvidenceAnalyzer.swift */,
+				B9595534FB05544FC85B26B8 /* FallacyDetector.swift */,
+				F8BB3C7BD4CF27943CF73355 /* RebuttalAnalyzer.swift */,
+				17AA3FDF3AA7C5951547A5AC /* ReportBuilder.swift */,
+				BB5E925456D0BBF568152D74 /* Scorer.swift */,
+			);
+			path = Analysis;
+			sourceTree = "<group>";
+		};
+		D25B935E7F1F1274941A4497 /* Coach */ = {
+			isa = PBXGroup;
+			children = (
+				6DC1438DD3DC305D61D732E8 /* Persona.swift */,
+				81AC2770915771A1A3A6E98B /* SparringPartner.swift */,
+			);
+			path = Coach;
+			sourceTree = "<group>";
+		};
+		4DEA2C0FF8EB02B919D7F36D /* Live */ = {
+			isa = PBXGroup;
+			children = (
+				38C02E1D97E41B0FB9EB4491 /* LiveReferee.swift */,
+			);
+			path = Live;
+			sourceTree = "<group>";
+		};
+		AAA932E52E39C9EE0BD8C75E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				ADD62675E1632FBCE4D7A4BC /* Claim.swift */,
+				631197A912ABEDEC67E27AC2 /* Fallacy.swift */,
+				ADA8C0034ACFFF881746D7E7 /* Finding.swift */,
+				2724C4D2D9F422FD921EF82E /* Report.swift */,
+				7B60D76D1FA7FAB09A36DB6B /* Scorecard.swift */,
+				3AE622BFCC6E8927A908BD03 /* Transcript.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		8F944076A365A09BF000AC86 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				3CF61C25801E0A7012A90E07 /* LanguageModel.swift */,
+				79146AC36EBBDE699CCFBA60 /* ModelAugmentedReferee.swift */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		1E7DF78C9ADD1B6F16071316 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				CD38AFFFD6A3584D9B3FAF14 /* ReportFormatter.swift */,
+				75EA9AA3043D181E87E2BDE0 /* SampleDebates.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		4F839B075CD2BBE47EC5F4D0 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				138FCA89C31BC4B2E171CC2E /* Lexicon.swift */,
+				4D948A52DF0507F787824DC0 /* Tokenizer.swift */,
+			);
+			path = Text;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,9 +271,6 @@
 			dependencies = (
 			);
 			name = Veritas;
-			packageProductDependencies = (
-				B050E3EB3F45558E725458D7 /* VeritasKit */,
-			);
 			productName = Veritas;
 			productReference = 21DAE3DC924DD4C1483D3FB0 /* Veritas.app */;
 			productType = "com.apple.product-type.application";
@@ -149,7 +281,6 @@
 		98F54143AB4E86B28C3AFEE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
@@ -166,10 +297,7 @@
 				en,
 				Base,
 			);
-			mainGroup = 95DCA4FAD37A9AFAE210AF0B;
-			packageReferences = (
-				F7489979BE3FCD4094C9B8F5 /* XCLocalSwiftPackageReference "Packages/VeritasKit" */,
-			);
+			mainGroup = 361FF3508AF23F4E0CB329EA;
 			productRefGroup = 31793280A19CDC7880B10A8E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -184,7 +312,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E68B095CB0EABD6566AAD8C /* Assets.xcassets in Resources */,
+				045B9511DFDCD54879ADB85B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,20 +323,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89F0C3F40F3CC640240D8127 /* Theme.swift in Sources */,
-				9AC6944D61F84E7F3016C5E5 /* AppStore.swift in Sources */,
-				5B0227E88340ED06CD048B7B /* DebateSession.swift in Sources */,
-				18B9BF0908A9DF54EDB16D24 /* Keychain.swift in Sources */,
-				F655146B6D9B732719681929 /* VeritasApp.swift in Sources */,
-				760427358D1FFEEDC150F39D /* DebateRoomView.swift in Sources */,
-				527F7C291B04828F903AC7C9 /* DictationButton.swift in Sources */,
-				E2D53F633860BFA6EB43443B /* HistoryView.swift in Sources */,
-				90DED613D1D54A33FAA60C32 /* HomeView.swift in Sources */,
-				E175D6D553C4A1F6427E4B07 /* LibraryView.swift in Sources */,
-				12CCF2167BA2CA67E3397A8F /* ReportView.swift in Sources */,
-				1999EED209CF8D49151260FC /* RootView.swift in Sources */,
-				4211AE5091F5C7B0625B3857 /* SettingsView.swift in Sources */,
-				C7794B5D912199FAD1B3453E /* SetupView.swift in Sources */,
+				31731B9E587881E500831B09 /* Theme.swift in Sources */,
+				4D6A072A02D1903CAE129D5B /* AppStore.swift in Sources */,
+				27E2E1B5043733B60310BCAB /* DebateSession.swift in Sources */,
+				295E1259145DDEBC27B572F8 /* Keychain.swift in Sources */,
+				1827777674F13E509F770831 /* VeritasApp.swift in Sources */,
+				BEEAFFD2CB797682F8CE0570 /* DebateRoomView.swift in Sources */,
+				D0F1F35CB310B1F550DB5822 /* DictationButton.swift in Sources */,
+				153A67781F337F4392269D5D /* HistoryView.swift in Sources */,
+				00493F2B555EEB50D489D8D2 /* HomeView.swift in Sources */,
+				AE239A5412FF70C9EE7DC0EC /* LibraryView.swift in Sources */,
+				343652014B5A323153184690 /* ReportView.swift in Sources */,
+				6EAB5C1B0AF2B6139FA8CE16 /* RootView.swift in Sources */,
+				18762BBA92580C068169728C /* SettingsView.swift in Sources */,
+				77BFC24D65C641D449D15490 /* SetupView.swift in Sources */,
+				75E294226F1886C922B56111 /* CivilityAnalyzer.swift in Sources */,
+				9E30A04688EDD817BBE1896F /* ClaimExtractor.swift in Sources */,
+				195EDB5EE367D9A745FFC297 /* ConsistencyAnalyzer.swift in Sources */,
+				B120775EEFB0405F7BD00480 /* EvidenceAnalyzer.swift in Sources */,
+				F3864A1C46FF26D843DA86F6 /* FallacyDetector.swift in Sources */,
+				1F8308E503D1A11A52522D51 /* RebuttalAnalyzer.swift in Sources */,
+				ABA2A0B40BFF1510601E66A6 /* ReportBuilder.swift in Sources */,
+				79EA8156CC4460F03A725A2A /* Scorer.swift in Sources */,
+				AF9DDBC6990EDC219EADADBA /* Persona.swift in Sources */,
+				891EB85EDF98B212948F7D78 /* SparringPartner.swift in Sources */,
+				901F30764B3F94C094255946 /* LiveReferee.swift in Sources */,
+				05C66552C5E90D53DADCDAF9 /* Claim.swift in Sources */,
+				8D8B1E464089E746F8B8A4E5 /* Fallacy.swift in Sources */,
+				3E40DCBE975A410CD591228F /* Finding.swift in Sources */,
+				920107377327A2724E0FB91C /* Report.swift in Sources */,
+				54D6B2EF52683279C68EBA11 /* Scorecard.swift in Sources */,
+				36BCC4D82050779AF6D012F9 /* Transcript.swift in Sources */,
+				14662DBA585BBCFA5FCF8AC4 /* LanguageModel.swift in Sources */,
+				3C7593770B47787BA68C5F7A /* ModelAugmentedReferee.swift in Sources */,
+				79E5F9A9755BC31ECE785322 /* Referee.swift in Sources */,
+				B871EB84D42E1700752B3AD5 /* ReportFormatter.swift in Sources */,
+				6D4CB3DB112A209EDBB5F0B6 /* SampleDebates.swift in Sources */,
+				FC8CF95396467684D0853352 /* Lexicon.swift in Sources */,
+				420ED604E95FF56CF19A4B90 /* Tokenizer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -222,7 +374,6 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -249,7 +400,6 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -336,20 +486,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		F7489979BE3FCD4094C9B8F5 /* XCLocalSwiftPackageReference "Packages/VeritasKit" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/VeritasKit;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		B050E3EB3F45558E725458D7 /* VeritasKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = VeritasKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 98F54143AB4E86B28C3AFEE0 /* Project object */;
 }

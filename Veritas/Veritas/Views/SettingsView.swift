@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 struct SettingsView: View {
     @EnvironmentObject private var store: AppStore

@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import VeritasKit
 
 /// Everything needed to start a debate, in one `Hashable` value so it can
 /// travel through `NavigationStack` as a route.

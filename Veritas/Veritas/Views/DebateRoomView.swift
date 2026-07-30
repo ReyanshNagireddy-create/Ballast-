@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 /// The live debate: turn indicator, clock, transcript, note feed, input.
 struct DebateRoomView: View {

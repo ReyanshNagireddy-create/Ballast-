@@ -1,19 +1,31 @@
 #!/usr/bin/env python3
 """Regenerate Veritas.xcodeproj from whatever is on disk.
 
-The project is written in the classic pbxproj format (objectVersion 56)
-with an explicit reference for every file, rather than Xcode 16's
-file-system-synchronized groups. That format is newer and much tidier, but
-it silently shows an empty navigator on older Xcode — and this project is
-maintained without a Mac in the loop, so it takes the boring format that
-every Xcode since 15 reads.
+Two deliberate choices here, both made because this project is maintained
+without a Mac in the loop and nothing can be verified locally:
 
-Run it after adding or removing a file in Veritas/:
+1. **Classic pbxproj format** (objectVersion 56), with an explicit
+   reference for every file, rather than Xcode 16's file-system
+   synchronized groups. The newer format is much tidier and silently shows
+   an empty navigator on an older Xcode.
+
+2. **No Swift package reference.** VeritasKit's sources are compiled
+   directly into the app target instead of being linked as a local
+   package. `XCLocalSwiftPackageReference` needs Xcode 15+, and a project
+   Xcode refuses to parse opens as an empty window with no useful error.
+   What is left in this file is nothing newer than Xcode 4 understands.
+
+   The package is still a real package: `Packages/VeritasKit/Package.swift`
+   is untouched and `swift test` runs the whole suite there. The app just
+   shares the same source files rather than linking a built product, which
+   is why no app file imports VeritasKit.
+
+Run after adding or deleting any file under Veritas/ or the engine:
 
     python3 Tools/generate-xcodeproj.py
 
-Then reopen the project. IDs are derived from the file path, so rerunning
-produces a byte-identical project and the diff stays readable.
+Object ids are derived from file paths, so rerunning is byte-identical and
+diffs stay readable.
 """
 
 import hashlib
@@ -21,8 +33,13 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-APP_DIR = os.path.join(ROOT, "Veritas")
 PROJECT = os.path.join(ROOT, "Veritas.xcodeproj", "project.pbxproj")
+
+# (key, path relative to the project directory)
+SOURCE_ROOTS = [
+    ("app", "Veritas"),
+    ("kit", os.path.join("Packages", "VeritasKit", "Sources", "VeritasKit")),
+]
 
 BUNDLE_ID = "dev.veritas.app"
 IOS_MIN = "17.0"
@@ -33,30 +50,32 @@ FILE_TYPES = {
     ".xcassets": "folder.assetcatalog",
     ".entitlements": "text.plist.entitlements",
     ".plist": "text.plist.xml",
-    ".md": "net.daringfireball.markdown",
 }
 
 
 def gid(*parts):
     """A stable 24-hex object id derived from the given key."""
-    digest = hashlib.sha1("::".join(parts).encode()).hexdigest()
-    return digest[:24].upper()
+    return hashlib.sha1("::".join(parts).encode()).hexdigest()[:24].upper()
 
 
-def collect():
-    """Every file in the app folder, grouped by its directory."""
+def file_type(path):
+    return FILE_TYPES.get(os.path.splitext(path)[1], "text")
+
+
+def collect(base):
+    """Files under `base`, relative to it, split by how they get built."""
     sources, resources, others = [], [], []
-    for dirpath, dirnames, filenames in os.walk(APP_DIR):
+    for dirpath, dirnames, filenames in os.walk(base):
         dirnames.sort()
-        # Asset catalogues are single references, not directories to descend into.
         for name in list(dirnames):
+            # Asset catalogues are one reference, not a directory to descend.
             if name.endswith(".xcassets"):
                 dirnames.remove(name)
-                resources.append(os.path.relpath(os.path.join(dirpath, name), APP_DIR))
+                resources.append(os.path.relpath(os.path.join(dirpath, name), base))
         for name in sorted(filenames):
             if name.startswith("."):
                 continue
-            rel = os.path.relpath(os.path.join(dirpath, name), APP_DIR)
+            rel = os.path.relpath(os.path.join(dirpath, name), base)
             if name.endswith(".swift"):
                 sources.append(rel)
             elif name.endswith(".entitlements"):
@@ -66,12 +85,8 @@ def collect():
     return sorted(sources), sorted(resources), sorted(others)
 
 
-def file_type(path):
-    return FILE_TYPES.get(os.path.splitext(path)[1], "text")
-
-
-def build_groups(paths):
-    """Directory -> immediate children, mirroring the folder layout."""
+def build_tree(paths):
+    """Directory -> its immediate subdirectories and files."""
     tree = {"": {"dirs": set(), "files": []}}
     for path in paths:
         parts = path.split(os.sep)
@@ -88,16 +103,27 @@ def build_groups(paths):
 
 
 def main():
-    sources, resources, others = collect()
-    everything = sources + resources + others
-    if not sources:
-        sys.exit("no Swift files found under %s" % APP_DIR)
+    roots = []
+    for key, rel in SOURCE_ROOTS:
+        base = os.path.join(ROOT, rel)
+        if not os.path.isdir(base):
+            sys.exit("missing source root: %s" % rel)
+        sources, resources, others = collect(base)
+        roots.append({
+            "key": key,
+            "rel": rel,
+            "name": os.path.basename(rel),
+            "sources": sources,
+            "resources": resources,
+            "others": others,
+            "tree": build_tree(sources + resources + others),
+        })
 
-    tree = build_groups(everything)
+    if not any(root["sources"] for root in roots):
+        sys.exit("no Swift files found")
 
-    # --- ids -------------------------------------------------------------
     project_id = gid("project")
-    main_group = gid("group", "")
+    main_group = gid("group", "main")
     products_group = gid("group", "products")
     target_id = gid("target", "Veritas")
     product_ref = gid("product", "Veritas.app")
@@ -106,9 +132,6 @@ def main():
     resources_phase = gid("phase", "resources")
     project_config_list = gid("configlist", "project")
     target_config_list = gid("configlist", "target")
-    package_ref = gid("package", "VeritasKit")
-    package_product = gid("packageproduct", "VeritasKit")
-    package_build_file = gid("buildfile", "VeritasKit")
 
     out = []
     w = out.append
@@ -124,14 +147,15 @@ def main():
 
     # --- PBXBuildFile ----------------------------------------------------
     w("/* Begin PBXBuildFile section */")
-    w("\t\t%s /* VeritasKit in Frameworks */ = {isa = PBXBuildFile; productRef = %s /* VeritasKit */; };"
-      % (package_build_file, package_product))
-    for path in sources:
-        w("\t\t%s /* %s in Sources */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };"
-          % (gid("buildfile", path), os.path.basename(path), gid("fileref", path), os.path.basename(path)))
-    for path in resources:
-        w("\t\t%s /* %s in Resources */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };"
-          % (gid("buildfile", path), os.path.basename(path), gid("fileref", path), os.path.basename(path)))
+    for root in roots:
+        for path in root["sources"]:
+            w("\t\t%s /* %s in Sources */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };"
+              % (gid("buildfile", root["key"], path), os.path.basename(path),
+                 gid("fileref", root["key"], path), os.path.basename(path)))
+        for path in root["resources"]:
+            w("\t\t%s /* %s in Resources */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };"
+              % (gid("buildfile", root["key"], path), os.path.basename(path),
+                 gid("fileref", root["key"], path), os.path.basename(path)))
     w("/* End PBXBuildFile section */")
     w("")
 
@@ -139,20 +163,21 @@ def main():
     w("/* Begin PBXFileReference section */")
     w("\t\t%s /* Veritas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Veritas.app; sourceTree = BUILT_PRODUCTS_DIR; };"
       % product_ref)
-    for path in everything:
-        name = os.path.basename(path)
-        w("\t\t%s /* %s */ = {isa = PBXFileReference; lastKnownFileType = %s; path = %s; sourceTree = \"<group>\"; };"
-          % (gid("fileref", path), name, file_type(path), name))
+    for root in roots:
+        for path in root["sources"] + root["resources"] + root["others"]:
+            name = os.path.basename(path)
+            w("\t\t%s /* %s */ = {isa = PBXFileReference; lastKnownFileType = %s; path = %s; sourceTree = \"<group>\"; };"
+              % (gid("fileref", root["key"], path), name, file_type(path), name))
     w("/* End PBXFileReference section */")
     w("")
 
     # --- PBXFrameworksBuildPhase ----------------------------------------
+    # Empty: the engine is compiled in, not linked.
     w("/* Begin PBXFrameworksBuildPhase section */")
     w("\t\t%s /* Frameworks */ = {" % frameworks_phase)
     w("\t\t\tisa = PBXFrameworksBuildPhase;")
     w("\t\t\tbuildActionMask = 2147483647;")
     w("\t\t\tfiles = (")
-    w("\t\t\t\t%s /* VeritasKit in Frameworks */," % package_build_file)
     w("\t\t\t);")
     w("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
     w("\t\t};")
@@ -164,7 +189,8 @@ def main():
     w("\t\t%s = {" % main_group)
     w("\t\t\tisa = PBXGroup;")
     w("\t\t\tchildren = (")
-    w("\t\t\t\t%s /* Veritas */," % gid("group", "app"))
+    for root in roots:
+        w("\t\t\t\t%s /* %s */," % (gid("group", root["key"], ""), root["name"]))
     w("\t\t\t\t%s /* Products */," % products_group)
     w("\t\t\t);")
     w("\t\t\tsourceTree = \"<group>\";")
@@ -179,21 +205,30 @@ def main():
     w("\t\t\tsourceTree = \"<group>\";")
     w("\t\t};")
 
-    for directory in sorted(tree):
-        node = tree[directory]
-        group_id = gid("group", "app") if directory == "" else gid("group", directory)
-        label = "Veritas" if directory == "" else os.path.basename(directory)
-        w("\t\t%s /* %s */ = {" % (group_id, label))
-        w("\t\t\tisa = PBXGroup;")
-        w("\t\t\tchildren = (")
-        for child in sorted(node["dirs"]):
-            w("\t\t\t\t%s /* %s */," % (gid("group", child), os.path.basename(child)))
-        for path in sorted(node["files"]):
-            w("\t\t\t\t%s /* %s */," % (gid("fileref", path), os.path.basename(path)))
-        w("\t\t\t);")
-        w("\t\t\tpath = %s;" % ("Veritas" if directory == "" else os.path.basename(directory)))
-        w("\t\t\tsourceTree = \"<group>\";")
-        w("\t\t};")
+    for root in roots:
+        for directory in sorted(root["tree"]):
+            node = root["tree"][directory]
+            is_root = directory == ""
+            group_id = gid("group", root["key"], directory)
+            label = root["name"] if is_root else os.path.basename(directory)
+            w("\t\t%s /* %s */ = {" % (group_id, label))
+            w("\t\t\tisa = PBXGroup;")
+            w("\t\t\tchildren = (")
+            for child in sorted(node["dirs"]):
+                w("\t\t\t\t%s /* %s */," % (gid("group", root["key"], child), os.path.basename(child)))
+            for path in sorted(node["files"]):
+                w("\t\t\t\t%s /* %s */," % (gid("fileref", root["key"], path), os.path.basename(path)))
+            w("\t\t\t);")
+            if is_root:
+                # The engine's group sits several directories down, so the
+                # group carries the full relative path and a short name.
+                if root["rel"] != root["name"]:
+                    w("\t\t\tname = %s;" % root["name"])
+                w("\t\t\tpath = %s;" % root["rel"].replace(os.sep, "/"))
+            else:
+                w("\t\t\tpath = %s;" % os.path.basename(directory))
+            w("\t\t\tsourceTree = \"<group>\";")
+            w("\t\t};")
     w("/* End PBXGroup section */")
     w("")
 
@@ -212,9 +247,6 @@ def main():
     w("\t\t\tdependencies = (")
     w("\t\t\t);")
     w("\t\t\tname = Veritas;")
-    w("\t\t\tpackageProductDependencies = (")
-    w("\t\t\t\t%s /* VeritasKit */," % package_product)
-    w("\t\t\t);")
     w("\t\t\tproductName = Veritas;")
     w("\t\t\tproductReference = %s /* Veritas.app */;" % product_ref)
     w("\t\t\tproductType = \"com.apple.product-type.application\";")
@@ -227,7 +259,6 @@ def main():
     w("\t\t%s /* Project object */ = {" % project_id)
     w("\t\t\tisa = PBXProject;")
     w("\t\t\tattributes = {")
-    w("\t\t\t\tBuildIndependentTargetsInParallel = 1;")
     w("\t\t\t\tLastSwiftUpdateCheck = 1500;")
     w("\t\t\t\tLastUpgradeCheck = 1500;")
     w("\t\t\t\tTargetAttributes = {")
@@ -245,9 +276,6 @@ def main():
     w("\t\t\t\tBase,")
     w("\t\t\t);")
     w("\t\t\tmainGroup = %s;" % main_group)
-    w("\t\t\tpackageReferences = (")
-    w("\t\t\t\t%s /* XCLocalSwiftPackageReference \"Packages/VeritasKit\" */," % package_ref)
-    w("\t\t\t);")
     w("\t\t\tproductRefGroup = %s /* Products */;" % products_group)
     w("\t\t\tprojectDirPath = \"\";")
     w("\t\t\tprojectRoot = \"\";")
@@ -264,8 +292,9 @@ def main():
     w("\t\t\tisa = PBXResourcesBuildPhase;")
     w("\t\t\tbuildActionMask = 2147483647;")
     w("\t\t\tfiles = (")
-    for path in resources:
-        w("\t\t\t\t%s /* %s in Resources */," % (gid("buildfile", path), os.path.basename(path)))
+    for root in roots:
+        for path in root["resources"]:
+            w("\t\t\t\t%s /* %s in Resources */," % (gid("buildfile", root["key"], path), os.path.basename(path)))
     w("\t\t\t);")
     w("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
     w("\t\t};")
@@ -278,8 +307,9 @@ def main():
     w("\t\t\tisa = PBXSourcesBuildPhase;")
     w("\t\t\tbuildActionMask = 2147483647;")
     w("\t\t\tfiles = (")
-    for path in sources:
-        w("\t\t\t\t%s /* %s in Sources */," % (gid("buildfile", path), os.path.basename(path)))
+    for root in roots:
+        for path in root["sources"]:
+            w("\t\t\t\t%s /* %s in Sources */," % (gid("buildfile", root["key"], path), os.path.basename(path)))
     w("\t\t\t);")
     w("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
     w("\t\t};")
@@ -292,7 +322,6 @@ def main():
         "CLANG_ANALYZER_NONNULL = YES;",
         "CLANG_ENABLE_MODULES = YES;",
         "CLANG_ENABLE_OBJC_ARC = YES;",
-        "CLANG_WARN_DOCUMENTATION_COMMENTS = YES;",
         "CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;",
         "COPY_PHASE_STRIP = NO;",
         "ENABLE_STRICT_OBJC_MSGSEND = YES;",
@@ -369,35 +398,11 @@ def main():
         w("\t\t};")
 
     w("/* Begin XCConfigurationList section */")
-    configuration_list(
-        project_config_list,
-        "Build configuration list for PBXProject \"Veritas\"",
-        gid("config", "project", "Debug"),
-        gid("config", "project", "Release"),
-    )
-    configuration_list(
-        target_config_list,
-        "Build configuration list for PBXNativeTarget \"Veritas\"",
-        gid("config", "target", "Debug"),
-        gid("config", "target", "Release"),
-    )
+    configuration_list(project_config_list, "Build configuration list for PBXProject \"Veritas\"",
+                       gid("config", "project", "Debug"), gid("config", "project", "Release"))
+    configuration_list(target_config_list, "Build configuration list for PBXNativeTarget \"Veritas\"",
+                       gid("config", "target", "Debug"), gid("config", "target", "Release"))
     w("/* End XCConfigurationList section */")
-    w("")
-
-    w("/* Begin XCLocalSwiftPackageReference section */")
-    w("\t\t%s /* XCLocalSwiftPackageReference \"Packages/VeritasKit\" */ = {" % package_ref)
-    w("\t\t\tisa = XCLocalSwiftPackageReference;")
-    w("\t\t\trelativePath = Packages/VeritasKit;")
-    w("\t\t};")
-    w("/* End XCLocalSwiftPackageReference section */")
-    w("")
-
-    w("/* Begin XCSwiftPackageProductDependency section */")
-    w("\t\t%s /* VeritasKit */ = {" % package_product)
-    w("\t\t\tisa = XCSwiftPackageProductDependency;")
-    w("\t\t\tproductName = VeritasKit;")
-    w("\t\t};")
-    w("/* End XCSwiftPackageProductDependency section */")
     w("\t};")
     w("\trootObject = %s /* Project object */;" % project_id)
     w("}")
@@ -406,30 +411,36 @@ def main():
     with open(PROJECT, "w") as handle:
         handle.write("\n".join(out) + "\n")
 
+    total = sum(len(root["sources"]) for root in roots)
     print("wrote %s" % os.path.relpath(PROJECT, ROOT))
-    print("  %d Swift files, %d resources, %d other" % (len(sources), len(resources), len(others)))
+    for root in roots:
+        print("  %-12s %d Swift, %d resources" % (root["name"], len(root["sources"]), len(root["resources"])))
+    print("  %d Swift files in the target" % total)
 
     write_scheme(target_id)
-    return target_id
 
 
 def write_scheme(target_id):
     """The shared scheme, whose BlueprintIdentifier must match the target.
 
-    Generated from the same id as the project: a stale identifier here is
-    the difference between an app you can run and an Xcode window with no
-    scheme in the toolbar.
+    A stale identifier here is the difference between an app you can run
+    and an Xcode window with no scheme in the toolbar, so it comes out of
+    the same generator as the target id and cannot drift.
     """
     path = os.path.join(ROOT, "Veritas.xcodeproj", "xcshareddata", "xcschemes", "Veritas.xcscheme")
-    reference = (
-        "            <BuildableReference\n"
-        "               BuildableIdentifier = \"primary\"\n"
-        "               BlueprintIdentifier = \"%s\"\n"
-        "               BuildableName = \"Veritas.app\"\n"
-        "               BlueprintName = \"Veritas\"\n"
-        "               ReferencedContainer = \"container:Veritas.xcodeproj\">\n"
-        "            </BuildableReference>\n" % target_id
-    )
+
+    def reference(indent):
+        pad = " " * indent
+        return (
+            "%s<BuildableReference\n"
+            "%s   BuildableIdentifier = \"primary\"\n"
+            "%s   BlueprintIdentifier = \"%s\"\n"
+            "%s   BuildableName = \"Veritas.app\"\n"
+            "%s   BlueprintName = \"Veritas\"\n"
+            "%s   ReferencedContainer = \"container:Veritas.xcodeproj\">\n"
+            "%s</BuildableReference>\n" % (pad, pad, pad, target_id, pad, pad, pad, pad)
+        )
+
     scheme = """<?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1500"
@@ -487,7 +498,7 @@ def write_scheme(target_id):
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
-""" % (reference, reference.replace("            ", "         "), reference.replace("            ", "         "))
+""" % (reference(12), reference(9), reference(9))
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as handle:

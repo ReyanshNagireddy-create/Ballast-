@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 /// Colours, spacing and the small amount of shared styling the app needs.
 ///

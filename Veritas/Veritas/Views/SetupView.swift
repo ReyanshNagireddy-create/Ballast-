@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 struct SetupView: View {
     let kind: SetupKind

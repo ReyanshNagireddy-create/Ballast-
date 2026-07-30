@@ -1,5 +1,4 @@
 import SwiftUI
-import VeritasKit
 
 struct RootView: View {
     var body: some View {

@@ -1,6 +1,5 @@
 import Foundation
 import SwiftUI
-import VeritasKit
 
 /// A finished debate as the app stores it: the report plus which chair the
 /// user was sitting in, which is what makes the dashboard mean anything.
